@@ -1,1 +1,154 @@
 /* Bootsrap */
+* {
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Lato', sans-serif;
+}
+
+#logo img {
+    width: 300px;
+}
+
+/* general search input*/
+
+#general-search {
+    background: #E7E7E7 url(/assets/search.png) no-repeat;
+    background-position: 99%;
+    background-size: 25px;
+    padding: 20px;
+}
+
+#general-search::placeholder {
+    opacity: 0.6;
+}
+
+/* tag search */
+
+#tags {
+    display: flex;
+}
+
+.tag {
+    background: white url(/assets/Vector.png) no-repeat;
+    background-size: 15px;
+    background-position-x: 90%;
+    background-position-y: center;
+    display: inline-block;
+    min-width: 100px;
+    max-width: 250px;
+    width: fit-content;
+    padding: 7px 15px;
+    margin-right: 15px;
+    padding-right: 35px;
+}
+
+/* dropdown */
+
+.dropdown {
+    width: 150px;
+    display: flex;
+    text-align: center;
+    justify-content:space-around;
+    padding: 20px 0;
+    
+    font-weight: 700;
+}
+
+.dropdown, .dropdown__list-container, .tag {
+    border-radius: .25em;
+}
+
+.dropdown__list-container { 
+    display: none;
+    position: absolute;
+    z-index: 5;
+}
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 15px;
+    z-index: 2;
+}
+
+.dropdown__input, #general-search {
+    border: none;
+    outline: none;
+}
+
+.dropdown__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding-bottom: 10px;
+}
+
+.dropdown__list li {
+    color: white;
+}
+
+/*bg colors*/
+.green-pastel {
+    background-color: #ED6454;
+}
+
+.orange-pastel {
+    background-color: #68D9A4;
+}
+
+/* Toggles */
+
+*[data-hidden="true"] {
+    display: none;
+}
+
+*[data-hidden="false"] {
+    display: block;
+}
+
+.dropdown[data-hidden="false"] {
+    display: flex;
+}
+
+
+/* Recipe cards */
+
+.recipe__container {
+    background-color: #E7E7E7;
+    padding: 20px 10px;
+    margin: 0;
+}
+
+.recipe__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.recipe__ingredient-container {
+    display: flex;
+}
+
+.recipe__title {
+    font-weight: 500;
+}
+
+.recipe__ingredient {
+    font-weight: 700;
+    margin-bottom: 0;
+    font-size: 0.8em;
+}
+
+.recipe__ingredient-quantity {
+    font-weight: 400;
+}
+
+.recipe__timer {
+    font-weight: 700;
+    font-size: 1.2em;
+}
+
+.recipe__description {
+    font-size: 0.8em;
+    font-family: 'Roboto', sans-serif;
+    text-align: justify;
+}

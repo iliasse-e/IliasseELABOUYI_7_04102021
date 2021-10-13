@@ -1,5 +1,4 @@
 // les petits plat
-
 import  { getIngredients, getAppliances, getUstensils } from "./main.js";
 
 // Dom elements
@@ -14,10 +13,16 @@ const ingredientsInput = document.getElementById("ingredients-input");
 const ustensilsInput = document.getElementById("ustensils-input");
 const appliancesInput = document.getElementById("appliances-input");
 
+const dropdownLists = document.querySelectorAll(".dropdown__list-container") // All 3 dropdown list containers
+
 // gathers all dropdown content by category
 const ingredients = getIngredients();
 const appliances = getAppliances();
 const ustensils = getUstensils();
+
+window.onload = () => {
+    window.history.pushState({}, "", "index.html")
+}
 
 /**
  * Fills the dropdowns' lists with all their content (appareil, ingredients, ustensiles)
@@ -45,6 +50,10 @@ console.log(ingredients)
  */
 dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
 
+    // closes current opened dropdown
+    dropdownButtons.forEach((btn) => btn.setAttribute("data-hidden", "false"));
+    dropdownLists.forEach((list) => list.setAttribute("data-hidden", "true"));
+
     event.stopPropagation();
     const id = btn.getAttribute("id");
     const dropdownList = document.querySelector("#" + id + "-dropdown-list");
@@ -64,16 +73,28 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
         dropdownList.setAttribute("data-hidden", "true")
     }
 
-    /**
-     * Selects tag and send it to url
-     * */   
+    /****************************************************************************
+     * Creates a tag (in DOM) and query string (in url) out of content list click
+     ****************************************************************************/   
     dropdownlistElements.forEach((btn) => btn.addEventListener("click", (e) => {
         e.stopImmediatePropagation()
-        const url = "index.html";
-        const tagName = btn.textContent;
-        window.history.pushState({}, "", url + "?" + e.target.getAttribute("class") + "=" + tagName);
-        // creates & displays tag with out of url param
-        tagPopper()
+        const tagName = btn.textContent.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const typeName = e.target.getAttribute("class");
+
+        // index used for tags (in tagPopper func)
+        function returnTagIndex() {
+            let number = document.querySelectorAll(".tag").length;
+            for (let i=0; i<document.querySelectorAll(".tag").length; i++) {
+                if (document.querySelectorAll(".tag")[i].getAttribute("tag") > number) {
+                    number = Number(document.querySelectorAll(".tag")[i].getAttribute("tag"));
+                }
+            }
+            number += 1;
+            return number
+        }
+        
+        // creates & displays tag and url
+        tagPopper(typeName, tagName, returnTagIndex())
         // closes dropdown
         closeList()
     }))
@@ -91,20 +112,38 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
 }))
 
 /**
- * creates and displays a tag of the clicked dropdown text
+ * Toggles a tag of the chosen content (on list click)
+ * @param {String} category ingredients, appliances or ustensils
+ * @param {String} name text content of the tag
+ * @param {Number} index index of the tag which will be used for btn and URL
  */
-function tagPopper() {
+function tagPopper(category, name, index) {
+    
+    /*************************
+     * Pops on URL parameters
+     *************************/ 
+    const url = window.location.href;
+    const urlData = new URL(url);
+    const paramName = "tag";
+
+    urlData.searchParams.append(paramName + index, name);
+    window.history.pushState({}, "", urlData)
+
+    /*****************
+     * Pops on DOM tag
+     *****************/ 
     const container = document.getElementById("tags");
     
     // get tag name (from url)
-    const tagContent = window.location.search.split('=')[1];
+    const tagContent = name;
 
     // create tag
     const tag = document.createElement("div");
     const text = document.createElement("span");
 
     // attributes classes
-    tag.className = "tag";
+    tag.className = paramName;
+    tag.setAttribute("tag", index)
     text.className = "tag__title text-light";
 
     // appends to html nodes
@@ -115,7 +154,7 @@ function tagPopper() {
     text.textContent = tagContent;
 
     // adds the right color (blue ingredient, orange appareil, ...)
-    switch (window.location.search.split('=')[0].substring(1)) {
+    switch (category) {
         case "ingredients":
             tag.classList.add("bg-primary");
             break;
@@ -129,5 +168,16 @@ function tagPopper() {
             break;
     }
 
-    // Pops off the tag
+    /************************************************
+     * Pops off the tag and update URL (on tag click)
+     ************************************************/
+    tag.addEventListener("click", function() {
+        let urlUpdtate = new URL(window.location.href);
+        console.log(urlUpdtate.toString())
+        urlUpdtate.searchParams.delete(paramName + tag.getAttribute("tag"))
+        console.log(urlUpdtate.toString())
+        window.history.pushState({}, "", urlUpdtate)
+
+        tag.remove() // removes tag in DOM
+    })
 }
