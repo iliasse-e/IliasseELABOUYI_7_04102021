@@ -5,6 +5,10 @@
     font-family: 'Lato', sans-serif;
 }
 
+li::first-letter { 
+    text-transform: uppercase;
+}
+
 #logo img {
     width: 300px;
 }
@@ -109,6 +113,17 @@
     display: flex;
 }
 
+*[data-visible="true"] {
+    display: block;
+}
+
+*[data-visible="false"] {
+    display: none;
+}
+
+.dropdown[data-visible="true"] {
+    display: flex;
+}
 
 /* Recipe cards */
 

@@ -1,5 +1,6 @@
 // les petits plat
-import  { getIngredients, getAppliances, getUstensils } from "./main.js";
+import  { getIngredients as ingredients, getAppliances as appliances, getUstensils as ustensils } from "./main.js";
+import { updateResults } from "./search.js";
 
 // Dom elements
 const generalSearchBar = document.getElementById("general-search");
@@ -15,35 +16,51 @@ const appliancesInput = document.getElementById("appliances-input");
 
 const dropdownLists = document.querySelectorAll(".dropdown__list-container") // All 3 dropdown list containers
 
-// gathers all dropdown content by category
-const ingredients = getIngredients();
+// gathers all dropdown content by category (for fast method : delete *as* in import and *()* in FillDropdown param call)
+/*const ingredients = getIngredients();
 const appliances = getAppliances();
-const ustensils = getUstensils();
+const ustensils = getUstensils();*/
 
+
+// get tag(s) inner text in array
+function tagsContainerInnerText() {
+    const tagsContainer = document.querySelectorAll("#tags .tag");
+    let result = [];
+    for (let i = 0; i < tagsContainer.length; i++) {
+        result.push(tagsContainer[i].textContent);
+    }
+    return result;
+}
+
+// get rid of params by refresh page
 window.onload = () => {
     window.history.pushState({}, "", "index.html")
 }
 
 /**
- * Fills the dropdowns' lists with all their content (appareil, ingredients, ustensiles)
- * @param {Array} type ingredients, appliances, or ustensils
+ * Fills the dropdowns' lists with their available content (appareil, ingredients, ustensiles)
+ * Is called onload and after user inputs (chosen list element)
+ * @param {Array} allElements all ingredients, appliances, or ustensils
  * @param {String} id id of dropdown list node ("#ingredients", "#appliances" or "#ustensils")
  */
-function FillDropdownLists(type, id) {
+export function updateDropdown(allElements, id) {
     const listContainer = document.querySelector(id + "-dropdown-list ul");
-    for (let content = 0; content < type.length; content++) {
+    listContainer.innerHTML = ""; // clears list
+
+    for (let content = 0; content < allElements.length; content++) {
         const node = document.createElement("li");
-        node.textContent = type[content];
-        node.classList.add(id.substring(1))
-        listContainer.appendChild(node)
+        node.textContent = allElements[content];
+        node.classList.add(id.substring(1));
+        node.setAttribute("id", allElements[content].split(' ').join('-'));
+        node.setAttribute("data-visible", "true");
+        listContainer.appendChild(node);
     }
 }
 
-FillDropdownLists(ingredients, "#ingredients");
-FillDropdownLists(appliances, "#appliances");
-FillDropdownLists(ustensils, "#ustensils");
+updateDropdown(ingredients(), "#ingredients");
+updateDropdown(appliances(), "#appliances");
+updateDropdown(ustensils(), "#ustensils");
 
-console.log(ingredients)
 
 /**
  * Displays dropdown functionnality (hide btn, displays tag)
@@ -73,6 +90,7 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
         dropdownList.setAttribute("data-hidden", "true")
     }
 
+
     /****************************************************************************
      * Creates a tag (in DOM) and query string (in url) out of content list click
      ****************************************************************************/   
@@ -81,7 +99,7 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
         const tagName = btn.textContent.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const typeName = e.target.getAttribute("class");
 
-        // index used for tags (in tagPopper func)
+        // index used for tags (in tagToggle func)
         function returnTagIndex() {
             let number = document.querySelectorAll(".tag").length;
             for (let i=0; i<document.querySelectorAll(".tag").length; i++) {
@@ -93,10 +111,16 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
             return number
         }
         
+        
         // creates & displays tag and url
-        tagPopper(typeName, tagName, returnTagIndex())
+        tagToggle(typeName, tagName, returnTagIndex());
+
         // closes dropdown
-        closeList()
+        closeList();
+        
+        // update search result and dropdowns
+        updateResults(tagsContainerInnerText());
+        
     }))
     
     //toggles off on outside or chevron click
@@ -104,7 +128,6 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
     document.querySelector("body").addEventListener("click", (event) => {
         console.log(event.currentTarget);
         if (event.target.getAttribute("id") !== dropdownInput.getAttribute("id")) {
-            console.log(event.target.getAttribute("id"));
             closeList()
         }
     })
@@ -117,7 +140,7 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
  * @param {String} name text content of the tag
  * @param {Number} index index of the tag which will be used for btn and URL
  */
-function tagPopper(category, name, index) {
+function tagToggle(category, name, index) {
     
     /*************************
      * Pops on URL parameters
@@ -173,11 +196,15 @@ function tagPopper(category, name, index) {
      ************************************************/
     tag.addEventListener("click", function() {
         let urlUpdtate = new URL(window.location.href);
-        console.log(urlUpdtate.toString())
         urlUpdtate.searchParams.delete(paramName + tag.getAttribute("tag"))
-        console.log(urlUpdtate.toString())
         window.history.pushState({}, "", urlUpdtate)
 
         tag.remove() // removes tag in DOM
+
+        updateDropdown(ingredients(), "#ingredients");
+        updateDropdown(appliances(), "#appliances");
+        updateDropdown(ustensils(), "#ustensils");
+        
+        updateResults(tagsContainerInnerText());
     })
 }
