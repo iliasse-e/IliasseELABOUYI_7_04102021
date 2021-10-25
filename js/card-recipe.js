@@ -1,6 +1,13 @@
-import recipes from "./recipes.js";
+export class Card {
+    constructor (id, title, ingredients, description, time) {
+        this.id = id;
+        this.title = title;
+        this.ingredients = ingredients;
+        this.description = description;
+        this.time = time;
+    }
 
-export function displayCardRecipe(recipe) {
+    display() {
     /* Creates DOM */
     const cardsContainer = document.getElementById("cards-container");
 
@@ -20,7 +27,7 @@ export function displayCardRecipe(recipe) {
     const ingredientQuantity = document.createElement("div");
     
     // ingredient lines creator
-    recipe.ingredients.forEach(element => {
+    this.ingredients.forEach(element => {
 
         const ingredient = document.createElement("p");
         ingredient.className = "card-text recipe__ingredient";
@@ -46,8 +53,8 @@ export function displayCardRecipe(recipe) {
     /* Sets attributes and classes */
     cardContainer.className = "col card-container";
     cardContainer.setAttribute("data-visible", "true");
-    cardContainer.setAttribute("recipe", recipe.name);
-    cardContainer.setAttribute("id", recipe.id); 
+    cardContainer.setAttribute("recipe", this.title.toLowerCase().split(' ').join('-'));
+    cardContainer.setAttribute("id", this.id); 
     
     card.className = "card recipe";
     
@@ -59,16 +66,16 @@ export function displayCardRecipe(recipe) {
     recipeHeader.className = "recipe__header";
 
     title.className = "card-title recipe__title"
-    title.textContent = recipe.name // from file
+    title.textContent = this.title // from file
 
     timeSubtitle.className = "card-title recipe__timer";
-    timeSubtitle.innerHTML = `<span><img src="/assets/clock.png" alt="icone horloge"></span> ${recipe.time} min`
+    timeSubtitle.innerHTML = `<span><img src="/assets/clock.png" alt="icone horloge"></span> ${this.time} min`
 
     ingredientContainer.className = "recipe__ingredient-container";
     ingredientQuantity.className = "col";
     ingredientDescription.className = "col";
     description.className = "card-text recipe__description";
-    description.textContent = recipe.description
+    description.textContent = this.description
 
 
     /* Appends content in DOM */
@@ -86,9 +93,17 @@ export function displayCardRecipe(recipe) {
     ingredientContainer.appendChild(ingredientDescription);
     ingredientDescription.appendChild(description);
 
+    }
+
+    toggle() {
+        const card = document.getElementById(this.id);
+        const cardVisibility = card.getAttribute("data-visible");
+
+        if (cardVisibility == "true") {
+            card.setAttribute("data-visible", "false")
+        }
+
+       
+    }
+
 }
-
-export function toggleCard() {
-
-}
-
