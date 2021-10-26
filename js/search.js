@@ -1,9 +1,16 @@
-import { cards, dropdowns, updtatedList } from "./main.js";
+/**
+ * @file Sets the search functionality
+ */
+
+import { cards, dropdownLists, dropdowns, updtatedList } from "./main.js";
 import recipes from "./data/recipes.js";
 
 let input = document.getElementById("general-search");
 let isGeneralSearch = false;
 
+/**
+ * Sends a search when input search is filled
+ */
 export function generalSearch() {
     isGeneralSearch = true;
     search([input.value.toLowerCase()]);
@@ -16,31 +23,50 @@ input.addEventListener("input", function() {
     }
 })
 
+let allLi = dropdowns;
+
+let updatedCards = cards;
+
+var compteur = 0;
+
 /**
- * Filters the dropdowns and recipe results from user search choice
- * This function clears all the impertinent elements
+ * Filters the dropdowns list and recipe results from user search input
  * @param {Array} selectedTags tag(s) selected by user 
  * @returns Array of the impertinent elements (<li> of dropdown lists)
  */
 export function search(selectedTags) {
     
-    let currentListElements = updtatedList(); // array of list element shown
-    let recipeResults = getRecipiesResults(); // array of id's recipes shown
+    /**
+     * Array of (Objects) list elements shown in dropdowns
+     */
+    
+    console.log(allLi)
+    /**
+     * Array of (Objects) card recipes shown
+     */
+    let recipeResults = recipiesDisplayed();
 
-    let unavailableListElements = [];
-    let availableListElements = [];
+    let toHide = [];
+    let toShow = [];
 
+    // array of all list element related to the recipies shown
+    let recipiesLi = []
 
     let lastTag = selectedTags[selectedTags.length - 1];
 
-
+    for (let i = 0; i < allLi.length; i++) {
+        allLi[i].toggle()
+    }
+    
     for (let recipe = 0; recipe<recipeResults.length; recipe++) { // on va chercher dans chaque recette affichées
+        
+        let recipeKeywords = getAllKeywordsOf(recipeResults[recipe]); 
 
         if (isGeneralSearch) {
-            /*   for (let i=0; i<getObjectKeywords(recipes[recipeResults[recipe]]).length; i++) {
-                if (!getObjectKeywords(recipes[recipeResults[recipe]])[i].includes(selectedTags[tag])) {
-                    if (!unavailableListElements.includes(getObjectKeywords(recipes[recipeResults[recipe]])[i])) {
-                        unavailableListElements.push(getObjectKeywords(recipes[recipeResults[recipe]])[i])
+            /*   for (let i=0; i<recipeKeywords.length; i++) {
+                if (!recipeKeywords[i].includes(selectedTags[tag])) {
+                    if (!unavailableListElements.includes(recipeKeywords[i])) {
+                        unavailableListElements.push(recipeKeywords[i])
                     }
                 }
             } */
@@ -52,9 +78,9 @@ export function search(selectedTags) {
             if (!description.includes(selectedTags[tag]) && !name.includes(selectedTags[tag]) ) {
                 console.log(recipes[recipe].id + " does not include your search : " + selectedTags[tag])
 
-                for (let i = 0; i < getObjectKeywords(recipes[recipeResults[recipe]]).length; i++) {
+                for (let i = 0; i < recipeKeywords.length; i++) {
                     
-                    if (!getObjectKeywords(recipes[recipeResults[recipe]])[i].includes(selectedTags[tag])) {
+                    if (!recipeKeywords[i].includes(selectedTags[tag])) {
                         clear(recipes[recipe].id); // if nothing is find anywhere => clear this recipe
 
                         
@@ -63,12 +89,12 @@ export function search(selectedTags) {
                 
             }
 
-            for (let i = 0; i < getObjectKeywords(recipes[recipeResults[recipe]]).length; i++) {
+            for (let i = 0; i < recipeKeywords.length; i++) {
 
-                if (!getObjectKeywords(recipes[recipeResults[recipe]])[i].includes(selectedTags[tag])) {
+                if (!recipeKeywords[i].includes(selectedTags[tag])) {
 
                     for (let i=0; i< recipes[recipe].ingredients.length; i++) {
-                        if (!unavailableListElements.includes(getObjectKeywords(recipes[recipe].ingredients[i].ingredient))) {
+                        if (!unavailableListElements.includes(getAllKeywordsOf(recipes[recipe].ingredients[i].ingredient))) {
                             unavailableListElements.push(recipes[recipe].ingredients[i].ingredient) // or clear
                         }
                     }
@@ -95,63 +121,44 @@ export function search(selectedTags) {
 
         else {
 
-            if (!getObjectKeywords(recipes[recipeResults[recipe]]).includes(lastTag)) { // si la recette n'inclue pas le dernier tag
-            
-                cards[recipe].toggle() // supprime la carte de recette
-                
-                for (let e = 0; e < getObjectKeywords(recipes[recipeResults[recipe]]).length; e++) { // pour chaque éléments de la recette
-                    
-                    
-                    if (currentListElements.includes(getObjectKeywords(recipes[recipeResults[recipe]])[e])) { // si l'élément de la recette est présent dans les listes déroulantes
-                        
-                        //dropdowns[e].toggle()
-                        //clear(getObjectKeywords(recipes[recipeResults[recipe]])[e].split(' ').join('-')) // supprimer l'élément de la liste
+            if (!recipeKeywords.includes(lastTag)) { // si la recette ne contient pas le dernier tag
 
-                        if (!unavailableListElements.includes(getObjectKeywords(recipes[recipeResults[recipe]])[e])) { // l'ajouter dans le tableaux d'éléments à faire supprimer
-                            unavailableListElements.push(getObjectKeywords(recipes[recipeResults[recipe]])[e]);
-                        }
-                    }
-                }
+                updatedCards[recipe].toggle() // supprime la carte de recette
             }
-            
-            else { // si la recherche est inclue dans la recette
 
-                //if (isToggleOff) { // si on supprime un tag }                    }
+            else { // si la recette contient le dernier tag
                 
-                for (let e = 0; e < getObjectKeywords(recipes[recipeResults[recipe]]).length; e++) { // pour chaque élément de la recette
+                // Envoie les ingredients/appl/usten. de chaque carte affichée dans un tableau (pour les maintenir dans les listes déroulantes)
+                for (let e = 0; e < recipeKeywords.length; e++) {
+                 
                     
-                    if (currentListElements.includes(getObjectKeywords(recipes[recipeResults[recipe]])[e])) { // si l'élément de la recette n'est pas dans la liste des dropdown
-                        
-                        if (!availableListElements.includes(getObjectKeywords(recipes[recipeResults[recipe]])[e])) { // l'ajouter dans la liste d'éléments à faire apparaitre
-                            availableListElements.push(getObjectKeywords(recipes[recipeResults[recipe]])[e]);
-                        }
+                    if (!toShow.includes(recipeKeywords[e])) {
+                        toShow.push(recipeKeywords[e]);
+                        compteur ++;
+                        console.log(compteur)
                     }
                 }
-                display(recipes[recipe].id);
             }
         }
-
     }
+
     // hides clicked <li>
     if (!isGeneralSearch) {
-        unavailableListElements.push(lastTag)
-    } 
+        toShow.push(lastTag)
 
-    // Clears the dropdowns from its unavailable <li> elements
-
-    for (let i=0; i<unavailableListElements.length; i++) {
-        console.log(unavailableListElements.length)
-        //clear(unavailableListElements[i].split(' ').join('-'))
-        unavailableListElements[i]
     }
 
-    for (let i=0; i<availableListElements.length; i++) {
-        display(availableListElements[i].split(' ').join('-'))
+    console.log(toShow)
+
+    for (let i=0; i<toShow.length; i++) {
+        const list = findObjectOf(toShow[i]);
+        list.toggle();
     }
 
+    console.log(allLi)
 
-
-    return unavailableListElements
+    allLi = updtatedList(toShow)
+    console.log(allLi)
 }
 
 
@@ -164,17 +171,26 @@ export function search(selectedTags) {
     node.setAttribute("data-visible", "false");
 }
 
+/**
+ * Displays a hidden list element in DOM 
+ * @param {*} element 
+ */
 function display(element) {
     const node = document.getElementById(element);
     node.setAttribute("data-visible", "true");
 }
 
+
+/*************************
+ * Dropdown list functions
+ *************************/
+
 /**
- * Gathers all words (ingredients, appliances and ustensils) of one recipe
- * @param {Object} element the object recipe (ex: recipes[1])
- * @returns Array with all words relayed to one recipe
+ * Gathers all words (ingredients, appliances and ustensils) of one card recipe
+ * @param {Object} element the card recipe (ex: updatedCards[1])
+ * @returns Array with all words related to one recipe
  */
-function getObjectKeywords(element) {
+function getAllKeywordsOf(element) {
     let array = [];
     for (let i=0; i<element.ingredients.length; i++) {
         array.push(element.ingredients[i].ingredient.toLowerCase())
@@ -187,19 +203,51 @@ function getObjectKeywords(element) {
     return array
 }
 
+/**
+ * Finds and returns an List object from its string name
+ * @param {*} keyword 
+ * @returns the object List element
+ */
+export function findObjectOf(keyword) {
+
+    const arrayOfList = dropdowns;
+    
+    for (let i=0; i<arrayOfList.length; i++) {
+
+        const content = arrayOfList[i].content;
+        
+        if (keyword == content) {
+
+            return arrayOfList[i];
+        }
+    }
+}
+
+
+/*************************
+ * Recipe cards functions
+ *************************/
+
+
+/**
+ * Gathers all card objects that are visible
+ * @returns Array of {Object} cards displayed in result
+ */
+function recipiesDisplayed() {
+    let array = updatedCards;
+
+    for (let i=0; i<updatedCards.length; i++) {
+        if (updatedCards[i].isVisible == false) {
+            array.pop(updatedCards[i])
+        }
+    }
+    updatedCards = array;
+
+    return updatedCards
+}
+
 function getDescriptions(element) {
     let array = [];
     array.push(element.description.toLowerCase());
     return array
 }
-
-function getRecipiesResults() {
-    const cards = document.querySelectorAll(".card-container[data-visible='true']")
-    let array = [];
-
-    for (let i=0; i<cards.length; i++) {
-        array.push(cards[i].getAttribute("id")-1)
-    }
-    return array
-}
-

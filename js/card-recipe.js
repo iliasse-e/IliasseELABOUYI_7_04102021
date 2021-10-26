@@ -1,12 +1,30 @@
+/**
+ * Class representing a card recipe
+ */
 export class Card {
-    constructor (id, title, ingredients, description, time) {
+    /**
+     * Creates a card recipe
+     * @param {Number} id number of the recipe 
+     * @param {String} title title of the recipe
+     * @param {Array} ingredients ingredients of the recipe
+     * @param {String} description description of the recipe
+     * @param {Number} time time of the recipe
+     * @param {Boolean} isVisible state visibility of the recipe 
+     */
+    constructor (id, title, ingredients, appliance, ustensils, description, time, isVisible) {
         this.id = id;
         this.title = title;
         this.ingredients = ingredients;
+        this.appliance = appliance;
+        this.ustensils = ustensils;
         this.description = description;
         this.time = time;
+        this.isVisible = true
     }
 
+    /**
+     * Displays card in the DOM
+     */
     display() {
     /* Creates DOM */
     const cardsContainer = document.getElementById("cards-container");
@@ -95,15 +113,16 @@ export class Card {
 
     }
 
+    /**
+     * Toggles off the card
+     */
     toggle() {
         const card = document.getElementById(this.id);
         const cardVisibility = card.getAttribute("data-visible");
 
         if (cardVisibility == "true") {
             card.setAttribute("data-visible", "false")
+            this.isVisible == false;
         }
-
-       
     }
-
 }

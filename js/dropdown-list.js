@@ -1,10 +1,23 @@
+/**
+ * Class representing an element of list
+ */
 export class List {
-    constructor (id, type, content) {
+    /**
+     * Creates an element of list
+     * @param {String} id identifier (text content with "-" to replace " ")
+     * @param {String} type ingredients, appliances or ustensils  
+     * @param {String} content text of the element
+     */
+    constructor (id, type, content, isVisible) {
         this.id = id;
         this.type = type;
         this.content = content;
+        this.isVisible = true;
     }
 
+    /**
+     * Displays the UI element of list inside the DOM
+     */
     create() {
         const listContainer = document.querySelector(`#${this.type}-dropdown-list ul`);
         const node = document.createElement("li");
@@ -15,12 +28,21 @@ export class List {
         listContainer.appendChild(node);
     }
 
+    /**
+     * Toggles off the UI element of list
+     */
     toggle() {
         const node = document.getElementById(this.id);
         const nodeVisibility = node.getAttribute("data-visible");
 
-        if (nodeVisibility == "true") {
+        if (this.isVisible == true) {
+            this.isVisible = false;
             node.setAttribute("data-visible", "false")
+        }
+
+        else {
+            this.isVisible = true;
+            node.setAttribute("data-visible", "true")
         }
 
     }

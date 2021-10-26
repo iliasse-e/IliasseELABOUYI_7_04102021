@@ -1,4 +1,7 @@
-// les petits plat
+/**
+ * @file Sets up the front element and functionality of the page
+ */
+
 import { search } from "../search.js";
 import { Tag } from "../tag.js";
 
@@ -67,7 +70,7 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
      ****************************************************************************/   
     dropdownlistElements.forEach((btn) => btn.addEventListener("click", (e) => {
         e.stopImmediatePropagation()
-        const tagName = btn.textContent.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const tagName = btn.textContent;
         const typeName = e.target.getAttribute("class");
 
         // index used for Tag instances

@@ -1,11 +1,22 @@
-
+/**
+ * Class Representing a tag
+ */
 export class Tag {
+    /**
+     * Creates a tag
+     * @param {*} type ingredients, appliances or ustensils. 
+     * @param {*} content text content of the tag
+     * @param {*} index index used as an identifier for url and to identify the tag 
+     */
     constructor(type, content, index) {
         this.type = type,
         this.content = content,
         this.index = index
     }
 
+    /**
+     * Displays the tag in the DOM and removes it on click in itself
+     */
     create() {
         const container = document.getElementById("tags");
     
@@ -51,7 +62,7 @@ export class Tag {
         const url = window.location.href;
         const urlData = new URL(url);
         
-        urlData.searchParams.append(paramName + this.index, this.content);
+        urlData.searchParams.append(paramName + this.index, this.content.normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
         window.history.pushState({}, "", urlData);
 
         /**********************

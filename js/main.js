@@ -1,6 +1,7 @@
 import { Card } from "./card-recipe.js";
 import { List } from "./dropdown-list.js";
 import { recipes } from "./data/recipes.js";
+import { findObjectOf } from "./search.js";
 
 /**
  * Gathers all recipes
@@ -8,6 +9,10 @@ import { recipes } from "./data/recipes.js";
  */
 export let currentRecipes = recipes;
 
+/**
+ * Creates all List objects, and displays them in DOM
+ * @returns Array of all List objects
+ */
 export function dropdownLists() { // calls List class and display dropdowns lists
      
     let allElements = [];
@@ -35,16 +40,16 @@ export function dropdownLists() { // calls List class and display dropdowns list
     return allElements
 }
 
-export function updtatedList() { // array of textContent dropdown elements
+/**
+ * Gathers the visivle list elements
+ * @returns Array of textContent dropdown elements
+ */
+export function updtatedList(availableLiArray) {
     
     let availableElements = [];
 
-    const allElements = document.querySelectorAll(".dropdown__list li");
-
-    for (let i=0; i<allElements.length; i++) {
-        if (allElements[i].getAttribute("data-visible") == "true") {
-            availableElements.push(allElements[i].textContent.split('-').join(' '))
-        }
+    for (let i=0; i<availableLiArray.length; i++) {
+        availableElements.push(findObjectOf(availableLiArray[i]))
     }
 
     return availableElements
@@ -109,17 +114,20 @@ export function updatedListOf(element) {
     return array
 }
 
-// gathers all cards objects
+/******************
+ * Create objects *
+ ******************/
+
+// Array of all cards objects
 export let cards = [];
-
-// gathers all lists objects
-export let dropdowns = dropdownLists()
-
 // calls class Card and display cards
 for (let recipe = 0; recipe < currentRecipes.length; recipe++) {
-    cards.push(new Card(currentRecipes[recipe].id, currentRecipes[recipe].name, currentRecipes[recipe].ingredients, currentRecipes[recipe].description, currentRecipes[recipe].time));
+    cards.push(new Card(currentRecipes[recipe].id, currentRecipes[recipe].name, currentRecipes[recipe].ingredients, currentRecipes[recipe].appliance, currentRecipes[recipe].ustensils, currentRecipes[recipe].description, currentRecipes[recipe].time));
     cards[recipe].display()
 }
+
+// Array of all lists objects (displayed in dropdown.js)
+export let dropdowns = dropdownLists()
 
 
 console.log(cards)
