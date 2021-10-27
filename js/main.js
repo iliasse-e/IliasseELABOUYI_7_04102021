@@ -40,21 +40,6 @@ export function dropdownLists() { // calls List class and display dropdowns list
     return allElements
 }
 
-/**
- * Gathers the visivle list elements
- * @returns Array of textContent dropdown elements
- */
-export function updtatedList(availableLiArray) {
-    
-    let availableElements = [];
-
-    for (let i=0; i<availableLiArray.length; i++) {
-        availableElements.push(findObjectOf(availableLiArray[i]))
-    }
-
-    return availableElements
-}
-
 // gathers all ingredients
 export function getIngredients() {
     

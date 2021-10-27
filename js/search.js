@@ -2,7 +2,7 @@
  * @file Sets the search functionality
  */
 
-import { cards, dropdownLists, dropdowns, updtatedList } from "./main.js";
+import { cards, dropdownLists, dropdowns } from "./main.js";
 import recipes from "./data/recipes.js";
 
 let input = document.getElementById("general-search");
@@ -23,11 +23,18 @@ input.addEventListener("input", function() {
     }
 })
 
+/**
+ * All li (Object) available
+ * This Array will be updated after the first search to reduce list li available
+ *  */ 
 let allLi = dropdowns;
 
+/**
+ * All (Object) recipe cards
+ * This Array will be updated after each search to reduce cards available
+ */
 let updatedCards = cards;
 
-var compteur = 0;
 
 /**
  * Filters the dropdowns list and recipe results from user search input
@@ -37,14 +44,13 @@ var compteur = 0;
 export function search(selectedTags) {
     
     /**
-     * Array of (Objects) list elements shown in dropdowns
-     */
-    
-    console.log(allLi)
-    /**
      * Array of (Objects) card recipes shown
      */
     let recipeResults = recipiesDisplayed();
+
+    let updated = [];
+
+    console.log(recipeResults)
 
     let toHide = [];
     let toShow = [];
@@ -127,6 +133,8 @@ export function search(selectedTags) {
             }
 
             else { // si la recette contient le dernier tag
+
+                updated.push(updatedCards[recipe])
                 
                 // Envoie les ingredients/appl/usten. de chaque carte affichée dans un tableau (pour les maintenir dans les listes déroulantes)
                 for (let e = 0; e < recipeKeywords.length; e++) {
@@ -134,8 +142,6 @@ export function search(selectedTags) {
                     
                     if (!toShow.includes(recipeKeywords[e])) {
                         toShow.push(recipeKeywords[e]);
-                        compteur ++;
-                        console.log(compteur)
                     }
                 }
             }
@@ -157,7 +163,11 @@ export function search(selectedTags) {
 
     console.log(allLi)
 
-    allLi = updtatedList(toShow)
+    /*********************************************
+     * Updates data (cards Array and list Array) *
+     *********************************************/
+    allLi = updtatedList(toShow);
+    updatedCards = updated;
     console.log(allLi)
 }
 
@@ -234,20 +244,40 @@ export function findObjectOf(keyword) {
  * @returns Array of {Object} cards displayed in result
  */
 function recipiesDisplayed() {
-    let array = updatedCards;
+    let array = [];
 
     for (let i=0; i<updatedCards.length; i++) {
-        if (updatedCards[i].isVisible == false) {
-            array.pop(updatedCards[i])
+        if (updatedCards[i].isVisible == true) {
+            array.push(updatedCards[i])
         }
     }
     updatedCards = array;
 
-    return updatedCards
+    return array
 }
 
 function getDescriptions(element) {
     let array = [];
     array.push(element.description.toLowerCase());
     return array
+}
+
+
+/**********************
+ * Update methods
+ **********************/
+
+/**
+ * Gathers the visivle list elements
+ * @returns Array of textContent dropdown elements
+ */
+ export function updtatedList(availableLiArray) {
+    
+    let availableElements = [];
+
+    for (let i=0; i<availableLiArray.length; i++) {
+        availableElements.push(findObjectOf(availableLiArray[i]))
+    }
+
+    return availableElements
 }
