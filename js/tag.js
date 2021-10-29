@@ -2,8 +2,6 @@ import { tagsContainerInnerText } from "./components/dropdown.js";
 import { cards, dropdowns } from "./main.js";
 import { allLi, search, updatedCards } from "./search.js";
 
-export let isTagOff = false;
-
 /**
  * Class Representing a tag
  */
@@ -83,9 +81,7 @@ export class Tag {
             tag.remove();
 
             // launch search for the rest of the tags
-            //isTagOff = true;
             search(tagsContainerInnerText(), updatedCards, allLi);
-            //isTagOff = false;
         })
     
     }

@@ -4,7 +4,6 @@
 
 import { cards, dropdownLists, dropdowns } from "./main.js";
 import recipes from "./data/recipes.js";
-import { isTagOff } from "./tag.js";
 
 let input = document.getElementById("general-search");
 let isGeneralSearch = false;
@@ -57,7 +56,7 @@ export function search(selectedTags, recipeCards, listElements) {
      * Gathers all card objects that are visible
      * @returns Array of {Object} cards displayed in result
      */
-    function recipiesDisplayed() { //maybe replace updatedCards by recipeCards parameter
+    function recipiesDisplayed() { 
         let array = [];
 
         for (let i=0; i<recipeCards.length; i++) {
@@ -86,12 +85,13 @@ export function search(selectedTags, recipeCards, listElements) {
         }
     }
     
-    // pour chaque tag
+    // for each tag
     for (let tag = 0; tag < selectedTags.length; tag++) {
 
-        /**
-         * 
-         */
+        /********************
+         * Hides all elements
+         *******************/
+
         // toggles off all cards
         for (let i = 0; i < recipeCards.length; i++) {
             recipeCards[i].toggle("off")
@@ -102,25 +102,16 @@ export function search(selectedTags, recipeCards, listElements) {
             listElements[i].toggle("off")
         }
 
-        console.log("Cards before : ")
-        console.log(recipeCards)
-        console.log("Lists before : ")
-        console.log(listElements)
-
         /**
          * Array of (Objects) card recipes shown
          */
         let recipeResults = recipiesDisplayed();
 
-        
         let toHide = [];
         let toShow = [];
 
-
         // to push available recipes
         let updated = [];
-
-
 
         for (let recipe = 0; recipe<recipeCards.length; recipe++) { // on va chercher dans chaque recette affichées
             
@@ -208,42 +199,21 @@ export function search(selectedTags, recipeCards, listElements) {
             }
         }
     
-        // hides clicked <li>
-        if (!isGeneralSearch) {
-            toShow.push(selectedTags[tag])
-    
-        }
-    
 
         /*********************************************
          * Updates data (cards Array and list Array) *
          *********************************************/
+        
         // updates lists data
         listElements = updtatedList(toShow);
     
         // updates cards data
         recipeCards = updated;
 
-        // empty cards container and reset a display
-        /*if (isTagOff) {
-
-            document.querySelector("#cards-container").innerHTML = ""
-          
-            for (let i = 0; i < recipeCards.length; i++) {
-                recipeCards[i].display()
-            }
-        }*/
-
-        
-        console.log("Cards then : ")
-        console.log(recipeCards)
-        console.log("Lists then : ")
-        console.log(listElements)
 
         /***************************
          * Shows available elements
          ***************************/
-
 
         // toggles on all cards
         for (let i = 0; i < recipeCards.length; i++) {
@@ -256,8 +226,13 @@ export function search(selectedTags, recipeCards, listElements) {
             list.toggle("on");
         }
 
+    }
 
-    } // fin boucle tags container
+    // hides tags from dropdown
+    for (let tag = 0; tag < selectedTags.length; tag++) {
+        findObjectOf(selectedTags[tag]).toggle("off")
+    }
+
 
 }
 
