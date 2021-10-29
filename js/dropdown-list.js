@@ -31,16 +31,16 @@ export class List {
     /**
      * Toggles off the UI element of list
      */
-    toggle() {
+    toggle(state) {
         const node = document.getElementById(this.id);
         const nodeVisibility = node.getAttribute("data-visible");
 
-        if (this.isVisible == true) {
+        if (state == "off") {
             this.isVisible = false;
             node.setAttribute("data-visible", "false")
         }
 
-        else {
+        else if (state == "on") {
             this.isVisible = true;
             node.setAttribute("data-visible", "true")
         }

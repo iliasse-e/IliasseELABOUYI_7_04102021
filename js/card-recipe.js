@@ -116,13 +116,17 @@ export class Card {
     /**
      * Toggles off the card
      */
-    toggle() {
+    toggle(state) {
         const card = document.getElementById(this.id);
         const cardVisibility = card.getAttribute("data-visible");
 
-        if (cardVisibility == "true") {
+        if (state == "off") {
             card.setAttribute("data-visible", "false")
             this.isVisible == false;
+        }
+        else if (state == "on") {
+            card.setAttribute("data-visible", "true")
+            this.isVisible == true;
         }
     }
 }

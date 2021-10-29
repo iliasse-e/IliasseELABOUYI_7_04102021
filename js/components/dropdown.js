@@ -2,7 +2,7 @@
  * @file Sets up the front element and functionality of the page
  */
 
-import { search } from "../search.js";
+import { allLi, search, updatedCards } from "../search.js";
 import { Tag } from "../tag.js";
 
 
@@ -21,7 +21,7 @@ const appliancesInput = document.getElementById("appliances-input");
 const dropdownLists = document.querySelectorAll(".dropdown__list-container") // All 3 dropdown list containers
 
 // gets tag(s) inner text in array
-function tagsContainerInnerText() {
+export function tagsContainerInnerText() {
     const tagsContainer = document.querySelectorAll("#tags .tag");
     let result = [];
     for (let i = 0; i < tagsContainer.length; i++) {
@@ -91,7 +91,7 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
         closeList();
         
         // update search result and dropdowns
-        search(tagsContainerInnerText());
+        search(tagsContainerInnerText(), updatedCards, allLi);
     }))
     
     //toggles off dropdown on outside or chevron click
