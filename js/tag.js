@@ -1,6 +1,6 @@
 import { tagsContainerInnerText } from "./components/dropdown.js";
 import { card, cards, dropdowns } from "./main.js";
-import { allLi, generalSearch, search, updatedCards } from "./search.js";
+import { allLi, generalSearch, isGeneralSearch, search, updatedCards } from "./search.js";
 
 /**
  * Class Representing a tag
@@ -81,8 +81,10 @@ export class Tag {
             tag.remove();
 
             // launch search for the rest of the tags
+            if (isGeneralSearch) {
+                generalSearch()
+            }
             search(tagsContainerInnerText(), updatedCards);
-            generalSearch()
         })
     
     }

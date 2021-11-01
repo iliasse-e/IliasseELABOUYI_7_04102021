@@ -105,10 +105,6 @@ export function search(selectedTags, recipeCards) {
         }
 
         noTag = true
-
-        if (isGeneralSearch) {
-            input.value = document.getElementById("general-search").value.toLowerCase()
-        }
     }
 
     // when general search is in progress
