@@ -6,8 +6,12 @@ import { tagsContainerInnerText } from "./components/dropdown.js";
 import { card, cards, dropdownLists, dropdowns } from "./main.js";
 
 let input = document.getElementById("general-search");
+
+// indicates if general search is in progress
 export let isGeneralSearch = false;
 
+// indicates if the last tag is deleted
+export let noTag = false;
 
 /**
  * Sends a search when input search is filled
@@ -42,7 +46,6 @@ export function generalSearch() {
             }
 
         }
-        isGeneralSearch = false;
 }
 
 input.addEventListener("input", function() {
@@ -70,9 +73,6 @@ export let updatedCards = cards;
  */
 export function search(selectedTags, recipeCards) {
 
-    // indicates if the last tag is deleted
-    let noTag = false;
-    
     /************************
     * Recipe cards functions
     *************************/
@@ -93,21 +93,35 @@ export function search(selectedTags, recipeCards) {
         return array
     }
     
-    if (isGeneralSearch) {
 
-        // only when last tag is removed
-        if (selectedTags.length < 1) {
-            
-            // shown all cards
-            document.querySelector("#cards-container").innerHTML = ""
-            recipeCards = cards;
-            for (let i = 0; i < recipeCards.length; i++) {
-                recipeCards[i].display()
-            }
-    
-            noTag = true
+    // only when last tag is removed
+    if (selectedTags.length < 1) {
+        
+        // shown all cards
+        document.querySelector("#cards-container").innerHTML = ""
+        recipeCards = cards;
+        for (let i = 0; i < recipeCards.length; i++) {
+            recipeCards[i].display()
+        }
+
+        noTag = true
+
+        if (isGeneralSearch) {
+            input.value = document.getElementById("general-search").value.toLowerCase()
         }
     }
+
+    // when general search is in progress
+    if (isGeneralSearch) {
+        // shown all cards
+        console.log(recipeCards) 
+        recipiesDisplayed()
+        console.log(recipeCards) 
+       
+        noTag = false
+    }
+    
+    
     
     // for each tag
     for (let tag = 0; tag < selectedTags.length; tag++) {
@@ -117,8 +131,8 @@ export function search(selectedTags, recipeCards) {
          *********************/
 
         // toggles off all cards
-        for (let i = 0; i < recipeCards.length; i++) {
-            recipeCards[i].toggle("on")
+        for (let i = 0; i < cards.length; i++) {
+            cards[i].toggle("off")
         }
 
         for (let recipe = 0; recipe<recipeCards.length; recipe++) { // on va chercher dans chaque recette affichées
@@ -143,6 +157,7 @@ export function search(selectedTags, recipeCards) {
 
     }
 
+    console.log(noTag)
     return noTag
 }
 

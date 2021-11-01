@@ -2,7 +2,7 @@
  * @file Sets up the front element and functionality of the page
  */
 
-import { allLi, findObjectOf, getAllKeywordsOf, search, updatedCards } from "../search.js";
+import { allLi, findObjectOf, getAllKeywordsOf, noTag, search, updatedCards } from "../search.js";
 import { Tag } from "../tag.js";
 
 
@@ -60,7 +60,7 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
     document.querySelector("#" + btn.getAttribute("id") + "-input").select();
 
     // displays available <li>
-    updtateDropdown(search(tagsContainerInnerText(), updatedCards, allLi))
+    updtateDropdown(noTag)
     
     function closeList(){
         btn.setAttribute("data-hidden", "false");
