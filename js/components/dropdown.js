@@ -2,7 +2,7 @@
  * @file Sets up the front element and functionality of the page
  */
 
-import { allLi, search, updatedCards } from "../search.js";
+import { allLi, findObjectOf, getAllKeywordsOf, search, updatedCards } from "../search.js";
 import { Tag } from "../tag.js";
 
 
@@ -58,6 +58,9 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
     
     // focus on input
     document.querySelector("#" + btn.getAttribute("id") + "-input").select();
+
+    // displays available <li>
+    updtateDropdown(search(tagsContainerInnerText(), updatedCards, allLi))
     
     function closeList(){
         btn.setAttribute("data-hidden", "false");
@@ -91,10 +94,10 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
         closeList();
         
         // update search result and dropdowns
-        search(tagsContainerInnerText(), updatedCards, allLi);
+        search(tagsContainerInnerText(), updatedCards);
     }))
     
-    //toggles off dropdown on outside or chevron click
+    // toggles off dropdown on outside or chevron click
     document.querySelector("#" + btn.getAttribute("id") + "-dropdown-close").addEventListener("click", closeList);
     document.querySelector("body").addEventListener("click", (event) => {
         console.log(event.currentTarget);
@@ -105,3 +108,47 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
     
 }))
 
+/**
+ * Sets the visible dropdown elements and hides the non pertinent ones when the dropdown is clicked on
+ * @param {Boolean} noTag Indicates if the last tag is deleted so the function can toggle on every List object 
+ */
+function updtateDropdown(noTag) {
+
+    let toShow = [];
+    let tags = tagsContainerInnerText();
+    
+    // if there's no tag reset by default by toggling on all elements
+    if (noTag) {
+        for (let i=0; i<allLi.length; i++) {
+            allLi[i].toggle("on")
+        }
+        return
+    }
+
+    // toggles off list elements
+    for (let i=0; i<allLi.length; i++) {
+        allLi[i].toggle("off")
+    }
+
+    // sends all available list elements in toShow array
+    for (let i=0; i<updatedCards.length; i++) {
+        if (updatedCards[i].isVisible == true) {
+            for (let e=0; e < getAllKeywordsOf(updatedCards[i]).length; e++) {
+                if (!toShow.includes(getAllKeywordsOf(updatedCards[i])[e])) {
+                    toShow.push(getAllKeywordsOf(updatedCards[i])[e])
+                }
+            
+            }
+        }
+    }
+
+    // toggles on only available list elements
+    for (let i=0; i<toShow.length; i++) {
+        findObjectOf(toShow[i]).toggle("on")
+    }
+
+    // hides selected tags from dropdown
+    for (let tag = 0; tag < tags.length; tag++) {
+        findObjectOf(tags[tag]).toggle("off")
+    }
+}

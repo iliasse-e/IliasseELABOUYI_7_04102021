@@ -103,13 +103,18 @@ export function updatedListOf(element) {
  * Create objects *
  ******************/
 
-// Array of all cards objects
-export let cards = [];
 // calls class Card and display cards
-for (let recipe = 0; recipe < currentRecipes.length; recipe++) {
-    cards.push(new Card(currentRecipes[recipe].id, currentRecipes[recipe].name, currentRecipes[recipe].ingredients, currentRecipes[recipe].appliance, currentRecipes[recipe].ustensils, currentRecipes[recipe].description, currentRecipes[recipe].time));
-    cards[recipe].display()
+export function card() {
+    let array = []
+    for (let recipe = 0; recipe < currentRecipes.length; recipe++) {
+        array.push(new Card(currentRecipes[recipe].id, currentRecipes[recipe].name, currentRecipes[recipe].ingredients, currentRecipes[recipe].appliance, currentRecipes[recipe].ustensils, currentRecipes[recipe].description, currentRecipes[recipe].time, true));
+        array[recipe].display()
+    }
+    return array
 }
+
+// Array of all cards objects
+export let cards = card()
 
 // Array of all lists objects (displayed in dropdown.js)
 export let dropdowns = dropdownLists()

@@ -12,7 +12,7 @@ export class List {
         this.id = id;
         this.type = type;
         this.content = content;
-        this.isVisible = true;
+        this.isVisible = false;
     }
 
     /**

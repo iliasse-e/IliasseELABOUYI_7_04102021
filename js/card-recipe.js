@@ -77,7 +77,7 @@ export class Card {
     card.className = "card recipe";
     
     image.className = "card-img-top recipe__image"
-    image.src = "/assets/img.png";
+    image.src = "./assets/img.png";
     image.alt = "image de la recette";
 
     recipeContainer.className = "row card-body recipe__container";
@@ -87,7 +87,7 @@ export class Card {
     title.textContent = this.title // from file
 
     timeSubtitle.className = "card-title recipe__timer";
-    timeSubtitle.innerHTML = `<span><img src="/assets/clock.png" alt="icone horloge"></span> ${this.time} min`
+    timeSubtitle.innerHTML = `<span><img src="./assets/clock.png" alt="icone horloge"></span> ${this.time} min`
 
     ingredientContainer.className = "recipe__ingredient-container";
     ingredientQuantity.className = "col";
@@ -114,7 +114,8 @@ export class Card {
     }
 
     /**
-     * Toggles off the card
+     * Toggles on or off the card
+     * @param {String} "on" or "off"
      */
     toggle(state) {
         const card = document.getElementById(this.id);
@@ -122,11 +123,11 @@ export class Card {
 
         if (state == "off") {
             card.setAttribute("data-visible", "false")
-            this.isVisible == false;
+            this.isVisible = false;
         }
         else if (state == "on") {
             card.setAttribute("data-visible", "true")
-            this.isVisible == true;
+            this.isVisible = true;
         }
     }
 }

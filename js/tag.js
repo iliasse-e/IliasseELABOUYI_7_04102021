@@ -1,5 +1,5 @@
 import { tagsContainerInnerText } from "./components/dropdown.js";
-import { cards, dropdowns } from "./main.js";
+import { card, cards, dropdowns } from "./main.js";
 import { allLi, search, updatedCards } from "./search.js";
 
 /**
@@ -81,7 +81,7 @@ export class Tag {
             tag.remove();
 
             // launch search for the rest of the tags
-            search(tagsContainerInnerText(), updatedCards, allLi);
+            search(tagsContainerInnerText(), updatedCards);
         })
     
     }

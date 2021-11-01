@@ -2,20 +2,47 @@
  * @file Sets the search functionalities
  */
 
-import { cards, dropdownLists, dropdowns } from "./main.js";
-import recipes from "./data/recipes.js";
+import { tagsContainerInnerText } from "./components/dropdown.js";
+import { card, cards, dropdownLists, dropdowns } from "./main.js";
 
 let input = document.getElementById("general-search");
-let isGeneralSearch = false;
+export let isGeneralSearch = false;
 
 
 /**
  * Sends a search when input search is filled
  */
 export function generalSearch() {
+    // has to modify cards array or call search() inside this func
     isGeneralSearch = true;
-    search([input.value.toLowerCase()]);
-    isGeneralSearch = false;
+
+    const userInput = input.value.toLowerCase();
+    
+    search(tagsContainerInnerText(), updatedCards)
+
+    for (let recipe = 0; recipe<updatedCards.length; recipe++) { // on va chercher dans chaque recette affichées
+            
+        let recipeKeywords = getAllKeywordsOf(updatedCards[recipe]); 
+
+            const description = updatedCards[recipe].description.toLowerCase();
+            const name = updatedCards[recipe].title.toLowerCase();
+
+            // if title and description doesn't include search input then check in each ingredient, ustensil and appliance
+            if (!description.includes(userInput) && !name.includes(userInput) ) {
+                console.log(updatedCards[recipe].title + " does not include your search : " + userInput)
+
+                for (let i = 0; i < recipeKeywords.length; i++) {
+                    
+                    if (!recipeKeywords[i].includes(userInput)) {
+                        updatedCards[recipe].toggle("off") // if nothing is find anywhere => clear this recipe
+                        
+                    }
+                }
+                
+            }
+
+        }
+        isGeneralSearch = false;
 }
 
 input.addEventListener("input", function() {
@@ -39,14 +66,12 @@ export let updatedCards = cards;
 /**
  * Filters the dropdowns list and recipe results from user search input
  * @param {Array} selectedTags tag(s) selected by user 
- * @returns Array of the impertinent elements (<li> of dropdown lists)
+ * @returns {Boolean} used for the updatedDropdown function
  */
-export function search(selectedTags, recipeCards, listElements) {
-    
-    // array of all list element related to the recipies shown
-    let recipiesLi = []
-    
-    let lastTag = selectedTags[selectedTags.length - 1];
+export function search(selectedTags, recipeCards) {
+
+    // indicates if the last tag is deleted
+    let noTag = false;
     
     /************************
     * Recipe cards functions
@@ -64,195 +89,61 @@ export function search(selectedTags, recipeCards, listElements) {
                 array.push(recipeCards[i])
             }
         }
-        //recipeCards = array;
+        recipeCards = array;
         return array
     }
     
-    // only when last tag is removed
-    if (selectedTags.length < 1) {
-        
-        // shown all list <li>
-        listElements = dropdowns;
-        for (let i = 0; i < listElements.length; i++) {
-            listElements[i].toggle()
-        }
-        
-        // shown all cards
-        document.querySelector("#cards-container").innerHTML = ""
-        recipeCards = cards;
-        for (let i = 0; i < recipeCards.length; i++) {
-            recipeCards[i].display()
+    if (isGeneralSearch) {
+
+        // only when last tag is removed
+        if (selectedTags.length < 1) {
+            
+            // shown all cards
+            document.querySelector("#cards-container").innerHTML = ""
+            recipeCards = cards;
+            for (let i = 0; i < recipeCards.length; i++) {
+                recipeCards[i].display()
+            }
+    
+            noTag = true
         }
     }
     
     // for each tag
     for (let tag = 0; tag < selectedTags.length; tag++) {
 
-        /********************
-         * Hides all elements
-         *******************/
+        /*********************
+         * Hides all recipes
+         *********************/
 
         // toggles off all cards
         for (let i = 0; i < recipeCards.length; i++) {
-            recipeCards[i].toggle("off")
+            recipeCards[i].toggle("on")
         }
-
-        // toggles off all list
-        for (let i = 0; i < listElements.length; i++) {
-            listElements[i].toggle("off")
-        }
-
-        /**
-         * Array of (Objects) card recipes shown
-         */
-        let recipeResults = recipiesDisplayed();
-
-        let toHide = [];
-        let toShow = [];
-
-        // to push available recipes
-        let updated = [];
 
         for (let recipe = 0; recipe<recipeCards.length; recipe++) { // on va chercher dans chaque recette affichées
             
             let recipeKeywords = getAllKeywordsOf(recipeCards[recipe]); 
     
-            if (isGeneralSearch) {
-                /*   for (let i=0; i<recipeKeywords.length; i++) {
-                    if (!recipeKeywords[i].includes(selectedTags[tag])) {
-                        if (!unavailableListElements.includes(recipeKeywords[i])) {
-                            unavailableListElements.push(recipeKeywords[i])
-                        }
-                    }
-                } */
-    
-                const description = recipes[recipe].description;
-                const name = recipes[recipe].name;
-    
-                // if title and description doesn't include search input then check in each ingredient, ustensil and appliance
-                if (!description.includes(selectedTags[tag]) && !name.includes(selectedTags[tag]) ) {
-                    console.log(recipes[recipe].id + " does not include your search : " + selectedTags[tag])
-    
-                    for (let i = 0; i < recipeKeywords.length; i++) {
-                        
-                        if (!recipeKeywords[i].includes(selectedTags[tag])) {
-                            clear(recipes[recipe].id); // if nothing is find anywhere => clear this recipe
-    
-                            
-                        }
-                    }
-                    
-                }
-    
-                for (let i = 0; i < recipeKeywords.length; i++) {
-    
-                    if (!recipeKeywords[i].includes(selectedTags[tag])) {
-    
-                        for (let i=0; i< recipes[recipe].ingredients.length; i++) {
-                            if (!unavailableListElements.includes(getAllKeywordsOf(recipes[recipe].ingredients[i].ingredient))) {
-                                unavailableListElements.push(recipes[recipe].ingredients[i].ingredient) // or clear
-                            }
-                        }
-        
-                        if (!unavailableListElements.includes(recipes[recipe].appliance)) {
-                            unavailableListElements.push(recipes[recipe].appliance) // or clear
-                        }
-        
-                        for (let i=0; i< recipes[recipe].ustensils.length; i++) {
-                            if (!unavailableListElements.includes(recipes[recipe].ustensils[i])) {
-                                unavailableListElements.push(recipes[recipe].ustensils[i]) // or clear
-                            }
-                        }
-                    
-                    }
-    
-    
-                }
-    
-    
-    
+            if (!recipeKeywords.includes(selectedTags[tag])) { // si le dernier tag n'est pas inclu dans la recette
+                // hides card
+                recipeCards[recipe].toggle("off") 
+            }
+
+            else { // si le dernier tag est inclu dans la recette
+
+                recipeCards[recipe].toggle("on")
                 
             }
-    
-            else {
-    
-                if (!recipeKeywords.includes(selectedTags[tag])) { // si le dernier tag n'est pas inclu dans la recette
-                    // hides card
-                    //recipeCards[recipe].toggle() 
-                }
-    
-                else { // si le dernier tag est inclu dans la recette
-    
-                    if (!updated.includes(recipeCards[recipe])) { // on envoie la recette dans le tableau update
-                        updated.push(recipeCards[recipe])
-                    }
-                    
-                    // Envoie les ingredients/appl/usten. de chaque carte affichée dans un tableau (pour les maintenir dans les listes déroulantes)
-                    for (let e = 0; e < recipeKeywords.length; e++) {
-                        
-                        if (!toShow.includes(recipeKeywords[e])) {
-                            toShow.push(recipeKeywords[e]);
-                        }
-
-                    }
-                }
-            }
+            
         }
     
-
-        /*********************************************
-         * Updates data (cards Array and list Array) *
-         *********************************************/
-        
-        // updates lists data
-        listElements = updtatedList(toShow);
-    
-        // updates cards data
-        recipeCards = updated;
-
-
-        /***************************
-         * Shows available elements
-         ***************************/
-
-        // toggles on all cards
-        for (let i = 0; i < recipeCards.length; i++) {
-            recipeCards[i].toggle("on")
-        }
-
-        // toggles on list <li> available
-        for (let i=0; i<toShow.length; i++) {
-            const list = findObjectOf(toShow[i]);
-            list.toggle("on");
-        }
+        // make the next loop look for the recipes related to the previous tag
+        recipiesDisplayed()
 
     }
 
-    // hides tags from dropdown
-    for (let tag = 0; tag < selectedTags.length; tag++) {
-        findObjectOf(selectedTags[tag]).toggle("off")
-    }
-
-
-}
-
-
-/**
- * Clears the element in DOM ( hidding <li> in list or recipe cards in results )
- * @param {*} element id Number of the recipe (ex: "1") or id String of the dropdown list (ex: "sucre-vanille") 
- */
- function clear(element) {
-    const node = document.getElementById(element);
-    node.setAttribute("data-visible", "false");
-}
-
-/**
- * Displays a hidden list element in DOM 
- * @param {*} element 
- */
-function display(element) {
-    const node = document.getElementById(element);
-    node.setAttribute("data-visible", "true");
+    return noTag
 }
 
 
@@ -265,7 +156,7 @@ function display(element) {
  * @param {Object} element the card recipe (ex: updatedCards[1])
  * @returns Array with all words related to one recipe
  */
-function getAllKeywordsOf(element) {
+export function getAllKeywordsOf(element) {
     let array = [];
     for (let i=0; i<element.ingredients.length; i++) {
         array.push(element.ingredients[i].ingredient.toLowerCase())
@@ -318,6 +209,7 @@ function getDescriptions(element) {
 
 /**
  * Gathers the visible list elements
+ * @param {Array}
  * @returns Array of textContent dropdown elements
  */
  export function updtatedList(availableLiArray) {
@@ -330,3 +222,5 @@ function getDescriptions(element) {
 
     return availableElements
 }
+
+
