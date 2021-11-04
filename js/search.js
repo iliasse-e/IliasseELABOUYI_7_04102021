@@ -51,7 +51,7 @@ export function generalSearch() {
     const userInput = input.value.toLowerCase();
 
     
-    searchByTag(tagsContainerInnerText(), updatedCards)
+    searchByTag(tagsContainerInnerText(), updatedCards);
 
     for (let recipe = 0; recipe<updatedCards.length; recipe++) { // search on each displayed recipe
             
@@ -59,16 +59,40 @@ export function generalSearch() {
         const description = updatedCards[recipe].description.toLowerCase();
         const name = updatedCards[recipe].title.toLowerCase();
 
-        // if title and description doesn't include search input then check in each ingredient, ustensil and appliance
-        if (!description.includes(userInput) && !name.includes(userInput) ) {
+        //updatedCards[recipe].toggle("off");
+        let toogleState = "on"
 
-            for (let i = 0; i < recipeKeywords.length; i++) {
-                
-                if (!recipeKeywords[i].includes(userInput)) { // if nothing is found anywhere => clear this recipe
-                    updatedCards[recipe].toggle("off") 
-                    
+        // if title and description doesn't include search input then check in each ingredient, ustensil and appliance
+        for (let word = 0; word < description.split(" ").length; word++) {
+            if (description.split(" ")[word] !== userInput) {
+
+                for (let nameWord=0; nameWord < name.split(" ").length; nameWord++) {
+                    if (name.split(" ")[nameWord] !== userInput) {
+
+                        for (let keywordsWord = 0; keywordsWord < recipeKeywords.length; keywordsWord++) {
+
+                            for (let str = 0; str < recipeKeywords[keywordsWord].split(" ").length; str++ ) {
+                                
+                                if (recipeKeywords[keywordsWord].split(" ")[str] !== userInput) { // if nothing is found anywhere => clear this recipe
+                                    toogleState = "off";
+                                }
+                                else {
+                                    toogleState = "on";
+                                    break
+                                }
+                            }
+                            if (toogleState == "on") { break }
+                            
+                        }
+                        if (toogleState == "on") { break }
+                        
+                    }
                 }
             }
+        }
+
+        if (toogleState == "off") {
+            updatedCards[recipe].toggle(toogleState);
         }
     }
 }
