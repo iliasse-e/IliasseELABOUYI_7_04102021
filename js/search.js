@@ -1,64 +1,40 @@
 /**
- * @file Sets the search functionalities
+ * @file Sets the search functionalities (input search & filter search)
  */
 
 import { tagsContainerInnerText } from "./components/dropdown.js";
-import { card, cards, dropdownLists, dropdowns } from "./main.js";
+import { cards, dropdowns } from "./main.js";
 
 let input = document.getElementById("general-search");
 
-// indicates if general search is in progress
-export let isGeneralSearch = false;
-
-// indicates if the last tag is deleted
-export let noTag = false;
-
 /**
- * Sends a search when input search is filled
+ * Launch input search 
  */
-export function generalSearch() {
-    // has to modify cards array or call search() inside this func
-    isGeneralSearch = true;
-
-    const userInput = input.value.toLowerCase();
-    
-    search(tagsContainerInnerText(), updatedCards)
-
-    for (let recipe = 0; recipe<updatedCards.length; recipe++) { // on va chercher dans chaque recette affichées
-            
-        let recipeKeywords = getAllKeywordsOf(updatedCards[recipe]); 
-
-            const description = updatedCards[recipe].description.toLowerCase();
-            const name = updatedCards[recipe].title.toLowerCase();
-
-            // if title and description doesn't include search input then check in each ingredient, ustensil and appliance
-            if (!description.includes(userInput) && !name.includes(userInput) ) {
-                console.log(updatedCards[recipe].title + " does not include your search : " + userInput)
-
-                for (let i = 0; i < recipeKeywords.length; i++) {
-                    
-                    if (!recipeKeywords[i].includes(userInput)) {
-                        updatedCards[recipe].toggle("off") // if nothing is find anywhere => clear this recipe
-                        
-                    }
-                }
-                
-            }
-
-        }
-}
-
 input.addEventListener("input", function() {
-    if (input.value.length > 3) {
+    if (input.value.length > 2) {
         generalSearch()
+    }
+    else {
+        searchByTag(tagsContainerInnerText(), updatedCards);
+    }
+    
+    // If not result => error message
+    const cardsContainer = document.getElementById("cards-container");
+    let cardsCounter = document.querySelectorAll(".card-container[data-visible='true']").length;
+
+    if (cardsCounter < 1) {
+        const node = document.createElement("p");
+        node.setAttribute("id", "data-error")
+        node.textContent = "Aucune recette ne correspond à votre critère… vous pouvez chercher « tarte aux pommes », « poisson », etc."
+        cardsContainer.appendChild(node);
+    }
+    else {
+        if (document.getElementById("data-error")) {
+            document.getElementById("data-error").remove()
+        }
     }
 })
 
-/**
- * All li (Object) available
- * This Array will be updated after the first search to reduce list li available
- *  */ 
-export let allLi = dropdowns;
 
 /**
  * All (Object) recipe cards
@@ -66,12 +42,44 @@ export let allLi = dropdowns;
  */
 export let updatedCards = cards;
 
+
 /**
- * Filters the dropdowns list and recipe results from user search input
- * @param {Array} selectedTags tag(s) selected by user 
- * @returns {Boolean} used for the updatedDropdown function
+ * Filters cards results when input search is filled
  */
-export function search(selectedTags, recipeCards) {
+export function generalSearch() {
+    
+    const userInput = input.value.toLowerCase();
+
+    
+    searchByTag(tagsContainerInnerText(), updatedCards)
+
+    for (let recipe = 0; recipe<updatedCards.length; recipe++) { // search on each displayed recipe
+            
+        let recipeKeywords = getAllKeywordsOf(updatedCards[recipe]); 
+        const description = updatedCards[recipe].description.toLowerCase();
+        const name = updatedCards[recipe].title.toLowerCase();
+
+        // if title and description doesn't include search input then check in each ingredient, ustensil and appliance
+        if (!description.includes(userInput) && !name.includes(userInput) ) {
+
+            for (let i = 0; i < recipeKeywords.length; i++) {
+                
+                if (!recipeKeywords[i].includes(userInput)) { // if nothing is found anywhere => clear this recipe
+                    updatedCards[recipe].toggle("off") 
+                    
+                }
+            }
+        }
+    }
+}
+
+
+/**
+ * Filters cards recipe results when tag is selected
+ * @param {Array} selectedTags tag(s) selected by user 
+ * @param {Array} recipeCards represents objects of cards recipe
+ */
+export function searchByTag(selectedTags, recipeCards) {
 
     /************************
     * Recipe cards functions
@@ -92,33 +100,20 @@ export function search(selectedTags, recipeCards) {
         recipeCards = array;
         return array
     }
-    
 
     // only when last tag is removed
     if (selectedTags.length < 1) {
         
-        // shown all cards
+        // shows all cards
         document.querySelector("#cards-container").innerHTML = ""
-        recipeCards = cards;
-        for (let i = 0; i < recipeCards.length; i++) {
-            recipeCards[i].display()
+        updatedCards = cards;
+        for (let i = 0; i < updatedCards.length; i++) {
+            updatedCards[i].display();
+            updatedCards[i].toggle("on")
         }
-
-        noTag = true
+        return
     }
 
-    // when general search is in progress
-    if (isGeneralSearch) {
-        // shown all cards
-        console.log(recipeCards) 
-        recipiesDisplayed()
-        console.log(recipeCards) 
-       
-        noTag = false
-    }
-    
-    
-    
     // for each tag
     for (let tag = 0; tag < selectedTags.length; tag++) {
 
@@ -131,36 +126,29 @@ export function search(selectedTags, recipeCards) {
             cards[i].toggle("off")
         }
 
-        for (let recipe = 0; recipe<recipeCards.length; recipe++) { // on va chercher dans chaque recette affichées
+        for (let recipe = 0; recipe<recipeCards.length; recipe++) { // look inside each displayed recipe
             
             let recipeKeywords = getAllKeywordsOf(recipeCards[recipe]); 
     
-            if (!recipeKeywords.includes(selectedTags[tag])) { // si le dernier tag n'est pas inclu dans la recette
+            if (!recipeKeywords.includes(selectedTags[tag])) { // if tag is not include in recipe 
                 // hides card
                 recipeCards[recipe].toggle("off") 
             }
 
-            else { // si le dernier tag est inclu dans la recette
-
+            else {
+                // shows card
                 recipeCards[recipe].toggle("on")
-                
             }
-            
         }
-    
-        // make the next loop look for the recipes related to the previous tag
+        // make the next loop search the recipes related to the previous tag
         recipiesDisplayed()
-
     }
-
-    console.log(noTag)
-    return noTag
 }
 
 
-/*************************
- * Dropdown list functions
- *************************/
+/*******************
+ * Generic methods
+ *******************/
 
 /**
  * Gathers all words (ingredients, appliances and ustensils) of one card recipe
@@ -181,8 +169,8 @@ export function getAllKeywordsOf(element) {
 }
 
 /**
- * Finds and returns an List object from its string name
- * @param {*} keyword 
+ * Finds and returns a List object from its string name
+ * @param {String} keyword 
  * @returns the object List element
  */
 export function findObjectOf(keyword) {
@@ -199,39 +187,3 @@ export function findObjectOf(keyword) {
         }
     }
 }
-
-
-/*************************
- * Recipe cards functions
- *************************/
-
-
-
-function getDescriptions(element) {
-    let array = [];
-    array.push(element.description.toLowerCase());
-    return array
-}
-
-
-/**********************
- * Update methods
- **********************/
-
-/**
- * Gathers the visible list elements
- * @param {Array}
- * @returns Array of textContent dropdown elements
- */
- export function updtatedList(availableLiArray) {
-    
-    let availableElements = [];
-
-    for (let i=0; i<availableLiArray.length; i++) {
-        availableElements.push(findObjectOf(availableLiArray[i]))
-    }
-
-    return availableElements
-}
-
-

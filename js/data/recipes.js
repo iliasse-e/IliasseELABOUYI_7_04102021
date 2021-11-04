@@ -776,7 +776,7 @@ export const recipes = [
         "time": 30,
         "description":"Faire fondre le chocolat et le beurre au bain marie. Dans un Saladier battre les oeufs avec le sucre jusqu'à obtenir une texture de type mousse. Ajouter la farine ainsi que le mélange de beurre et chocolat fondu. Beurrez le moule à gateaux. Mettre au four préchauffé à 200° puis faites chauffer pendant 15 minutes. C'est prêt. Servir avec une boule de glace ou une crême dessert.",
         "appliance": "Four",
-        "ustensils":["moule à gateaux", "fouet", "casserole"]
+        "ustensils":["moule à gateaux", "fouet", "Casserole"]
     },
     {
         "id": 23,
@@ -990,7 +990,7 @@ export const recipes = [
         "time": 80,
         "description":"Emincer les blanc de poireaux et les faire chauffer dans 25 grammes de beurre. AJouter les pommes de terres coupées en morceaux. Ajouter l'eau et laisser mijoter pour 45 minutes. Chauffer l'oseille avec le beurre restant puis incorporer le tout. Mixez. Ajoutez la crème. Bon appetit.",
         "appliance": "Mixer",
-        "ustensils":["casserole","Couteau"]
+        "ustensils":["Casserole","Couteau"]
     },
     {
         "id": 29,
@@ -1046,7 +1046,7 @@ export const recipes = [
         "time": 60,
         "description":"Mettre tous les ingrédients dans une cocotte. ajouter de l'eau pour recouvrir l'ensemble et laisser cuirre à petit feur pour 1 heure. Passer au mixer. Salez, poivrez. C'est prêt",
         "appliance": "Mixer",
-        "ustensils":["casserole", "Cuillère en bois"]
+        "ustensils":["Casserole", "Cuillère en bois"]
     },
     {
         "id": 31,

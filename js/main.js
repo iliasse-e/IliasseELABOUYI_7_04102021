@@ -1,7 +1,10 @@
+/**
+ * @file Creates & displays Card and List {Objects} and gathers them in cards {Array} & dropdowns {Array}
+ */
+
 import { Card } from "./card-recipe.js";
 import { List } from "./dropdown-list.js";
 import { recipes } from "./data/recipes.js";
-import { findObjectOf } from "./search.js";
 
 /**
  * Gathers all recipes
@@ -9,10 +12,10 @@ import { findObjectOf } from "./search.js";
  */
 export let currentRecipes = recipes;
 
-/**
+/****************************************************
  * Creates all List objects, and displays them in DOM
  * @returns Array of all List objects
- */
+ ****************************************************/
 export function dropdownLists() { // calls List class and display dropdowns lists
      
     let allElements = [];
@@ -89,21 +92,15 @@ export function getUstensils() {
     return ustensils
 }
 
-export function updatedListOf(element) {
-    const cards = document.querySelectorAll("."+element+"[data-visible='true']")
-    let array = [];
+// Array of all lists objects (displayed in dropdown.js)
+export let dropdowns = dropdownLists()
 
-    for (let i=0; i<cards.length; i++) {
-        array.push(cards[i].getAttribute("id").split('-').join(' '))
-    }
-    return array
-}
 
-/******************
- * Create objects *
- ******************/
+/*****************************************
+ * Create Card objects and displays them *
+ *****************************************/
 
-// calls class Card and display cards
+// calls class Card, display cards and @returns the Card objects
 export function card() {
     let array = []
     for (let recipe = 0; recipe < currentRecipes.length; recipe++) {
@@ -115,10 +112,3 @@ export function card() {
 
 // Array of all cards objects
 export let cards = card()
-
-// Array of all lists objects (displayed in dropdown.js)
-export let dropdowns = dropdownLists()
-
-
-console.log(cards)
-console.log(dropdowns)

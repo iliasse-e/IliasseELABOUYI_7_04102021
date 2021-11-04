@@ -1,6 +1,5 @@
 import { tagsContainerInnerText } from "./components/dropdown.js";
-import { card, cards, dropdowns } from "./main.js";
-import { allLi, generalSearch, isGeneralSearch, search, updatedCards } from "./search.js";
+import { searchByTag, updatedCards } from "./search.js";
 
 /**
  * Class Representing a tag
@@ -51,10 +50,10 @@ export class Tag {
                 tag.classList.add("bg-primary");
                 break;
             case "ustensils":
-                tag.classList.add("orange-pastel");
+                tag.classList.add("green-pastel");
                 break;
             case "appliances":
-                tag.classList.add("green-pastel");
+                tag.classList.add("orange-pastel");
                 break;
             default:
                 break;
@@ -81,10 +80,11 @@ export class Tag {
             tag.remove();
 
             // launch search for the rest of the tags
-            if (isGeneralSearch) {
-                generalSearch()
-            }
-            search(tagsContainerInnerText(), updatedCards);
+            searchByTag(tagsContainerInnerText(), updatedCards);
+            
+            // triggers input in case of general search
+            let input = document.getElementById("general-search");
+            input.dispatchEvent(new Event("input"));
         })
     
     }

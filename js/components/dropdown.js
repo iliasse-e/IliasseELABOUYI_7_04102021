@@ -1,23 +1,16 @@
 /**
- * @file Sets up the front element and functionality of the page
+ * @file Sets up the front part of the page
+ * Calls dropdown's functionnalities
  */
 
-import { allLi, findObjectOf, getAllKeywordsOf, noTag, search, updatedCards } from "../search.js";
+import { toggleLi } from "../dropdown-input.js";
+import { filterDropdowns } from "../filter-dropdown.js";
+import { searchByTag, updatedCards } from "../search.js";
 import { Tag } from "../tag.js";
 
-
 // Dom elements
-const generalSearchBar = document.getElementById("general-search");
 const dropdownButtons = document.querySelectorAll(".dropdown"); // All 3 dropdown buttons
-const ingredientsBtn = document.getElementById("ingredients");
-const ustentilsBtn = document.getElementById("ustensils");
-const appliancesBtn = document.getElementById("appliances");
-
 const dropdownInputs = document.querySelectorAll(".dropdown__input"); // All 3 dropdown search inputs
-const ingredientsInput = document.getElementById("ingredients-input");
-const ustensilsInput = document.getElementById("ustensils-input");
-const appliancesInput = document.getElementById("appliances-input");
-
 const dropdownLists = document.querySelectorAll(".dropdown__list-container") // All 3 dropdown list containers
 
 // gets tag(s) inner text in array
@@ -30,15 +23,16 @@ export function tagsContainerInnerText() {
     return result;
 }
 
-// get rid of params by refresh page
+// reset url params by refresh page
 window.onload = () => {
-    window.history.pushState({}, "", "index.html")
+    window.history.pushState({}, "", "index.html");
+    document.getElementById("general-search").value = "";
 }
 
 
-/**
- * Displays front dropdown functionnality (hide btn, displays tag)
- */
+/*****************************************************************
+ * Displays front dropdown functionnality (hide btn, displays tag, launch searches)
+ *****************************************************************/
 dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
 
     // closes current opened dropdown
@@ -53,23 +47,34 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
     
     // hide btn
     btn.setAttribute("data-hidden", "true");
+
     // displays search input and list
     dropdownList.setAttribute("data-hidden", "false");
     
     // focus on input
     document.querySelector("#" + btn.getAttribute("id") + "-input").select();
 
-    // displays available <li>
-    updtateDropdown(noTag)
+    /********** Filters <li> inside dropdowns **********/
+    filterDropdowns()
     
+    /**
+     * Close list dropdown and clears input reset and lists
+     */
     function closeList(){
+        //closes dropdown
         btn.setAttribute("data-hidden", "false");
         dropdownList.setAttribute("data-hidden", "true")
+        
+        // clears inputs and reset lists
+        dropdownInputs.forEach(input => {
+            input.value = ""; // clears input
+            toggleLi(input.getAttribute("category")) // reset list
+        });
     }
 
 
     /****************************************************************************
-     * Creates a tag (in DOM) and query string (in url) out of content list click
+     * Creates a tag (in DOM) and query string (in url) out of dropdown list click
      ****************************************************************************/   
     dropdownlistElements.forEach((btn) => btn.addEventListener("click", (e) => {
         e.stopImmediatePropagation()
@@ -88,13 +93,14 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
             return number
         }
 
+        /****** Creates and display tag **********/
         new Tag(typeName, tagName, returnTagIndex()).create()
         
-        // closes dropdown
+        /****** Closes dropdown **********/
         closeList();
         
-        // update search result and dropdowns
-        search(tagsContainerInnerText(), updatedCards);
+        /****** Update search result and dropdowns *********/ 
+        searchByTag(tagsContainerInnerText(), updatedCards);
     }))
     
     // toggles off dropdown on outside or chevron click
@@ -107,48 +113,3 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
     })
     
 }))
-
-/**
- * Sets the visible dropdown elements and hides the non pertinent ones when the dropdown is clicked on
- * @param {Boolean} noTag Indicates if the last tag is deleted so the function can toggle on every List object 
- */
-function updtateDropdown(noTag) {
-
-    let toShow = [];
-    let tags = tagsContainerInnerText();
-    
-    // if there's no tag reset by default by toggling on all elements
-    if (noTag) {
-        for (let i=0; i<allLi.length; i++) {
-            allLi[i].toggle("on")
-        }
-        return
-    }
-
-    // toggles off list elements
-    for (let i=0; i<allLi.length; i++) {
-        allLi[i].toggle("off")
-    }
-
-    // sends all available list elements in toShow array
-    for (let i=0; i<updatedCards.length; i++) {
-        if (updatedCards[i].isVisible == true) {
-            for (let e=0; e < getAllKeywordsOf(updatedCards[i]).length; e++) {
-                if (!toShow.includes(getAllKeywordsOf(updatedCards[i])[e])) {
-                    toShow.push(getAllKeywordsOf(updatedCards[i])[e])
-                }
-            
-            }
-        }
-    }
-
-    // toggles on only available list elements
-    for (let i=0; i<toShow.length; i++) {
-        findObjectOf(toShow[i]).toggle("on")
-    }
-
-    // hides selected tags from dropdown
-    for (let tag = 0; tag < tags.length; tag++) {
-        findObjectOf(tags[tag]).toggle("off")
-    }
-}

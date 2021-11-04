@@ -46,7 +46,7 @@
           <div class="dropdowns row mt-3">
             
             <!--Ingredients btn-->
-            <div class="col">
+            <div class="col-md-2">
               <!--Dropdown btn-->
               <div class="dropdown bg-primary" data-hidden="false" id="ingredients">
                 <span class="dropdown__title text-light">Ingrédients</span>
@@ -56,7 +56,7 @@
               <!--Dropdown search input & list-->
               <div class="bg-primary dropdown__list-container" data-hidden="true" id="ingredients-dropdown-list">
                 <div class="input-container">
-                  <input class="dropdown__input bg-primary text-white" id="ingredients-input" type="text" placeholder="Choisir un ingrédient">
+                  <input class="dropdown__input bg-primary text-white" id="ingredients-input" category="ingredients" type="text" placeholder="Rechercher un ingrédient">
                   <img class="dropdown__chevron-up" id="ingredients-dropdown-close" src="./assets/chevron-up.svg" alt="fermer la liste d'options">
                 </div>
                 <ul class="dropdown__list">
@@ -66,17 +66,17 @@
             </div>
 
             <!--appliances btn-->
-            <div class="col">
+            <div class="col-md-2">
               <!--Dropdown btn-->
-              <div class="dropdown green-pastel" data-hidden="false" id="appliances">
+              <div class="dropdown orange-pastel" data-hidden="false" id="appliances">
                 <span class="dropdown__title text-light">Appareils</span>
                 <img class="dropdown__chevron-down" src="./assets/chevron-down.svg" alt="dérouler la liste d'options">
               </div>
 
               <!--Dropdown search input & list-->
-              <div class="dropdown__list-container green-pastel" data-hidden="true" id="appliances-dropdown-list">
+              <div class="dropdown__list-container orange-pastel" data-hidden="true" id="appliances-dropdown-list">
                 <div class="input-container">
-                  <input class="dropdown__input green-pastel text-white" id="appliances-input" type="text" placeholder="Choisir un appareil">
+                  <input class="dropdown__input orange-pastel text-white" id="appliances-input" category="appliances" type="text" placeholder="Rechercher un appareil">
                   <img class="dropdown__chevron-up" id="appliances-dropdown-close" src="./assets/chevron-up.svg" alt="fermer la liste d'options">
                 </div>
                 <ul class="dropdown__list">
@@ -85,17 +85,17 @@
             </div>
             
             <!--Ustensils btn-->
-            <div class="col">
+            <div class="col-md-2">
               <!--Dropdown btn-->
-              <div class="dropdown orange-pastel" data-hidden="false" id="ustensils">
+              <div class="dropdown green-pastel" data-hidden="false" id="ustensils">
                 <span class="dropdown__title text-light">Ustensiles</span>
                 <img class="dropdown__chevron-down" src="./assets/chevron-down.svg" alt="dérouler la liste d'options">
               </div>
 
               <!--Dropdown search input & list-->
-              <div class="dropdown__list-container orange-pastel" data-hidden="true" id="ustensils-dropdown-list">
+              <div class="dropdown__list-container green-pastel" data-hidden="true" id="ustensils-dropdown-list">
                 <div class="input-container">
-                  <input class="dropdown__input orange-pastel text-white" id="ustensils-input" type="text" placeholder="Choisir un ustensile">
+                  <input class="dropdown__input green-pastel text-white" id="ustensils-input" category="ustensils" type="text" placeholder="Rechercher un ustensile">
                   <img class="dropdown__chevron-up" id="ustensils-dropdown-close" src="./assets/chevron-up.svg" alt="fermer la liste d'options">
                 </div>
                 <ul class="dropdown__list">
@@ -124,8 +124,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.min.js" integrity="sha384-PsUw7Xwds7x08Ew3exXhqzbhuEYmA2xnwc8BuD6SEr+UmEHlX8/MCltYEodzWA4u" crossorigin="anonymous"></script>
     -->
+    <script type="module" src="js/components/dropdown.js"></script>
+    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/card-recipe.js"></script>
+    <script type="module" src="js/dropdown-input.js"></script>
   </body>
-  <script type="module" src="js/components/dropdown.js"></script>
-  <script type="module" src="js/main.js"></script>
-  <script type="module" src="js/card-recipe.js"></script>
 </html>

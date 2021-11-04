@@ -1,4 +1,11 @@
-/* Bootsrap */
+/* Bootsrap modifier */
+
+.col-md-2 {
+    width: 13%;
+}
+
+/**/
+
 * {
     text-decoration: none;
     list-style: none;
@@ -88,6 +95,10 @@ li::first-letter {
 
 .dropdown__list li {
     color: white;
+    margin: 4px 0;
+    line-break: auto;
+    width: 220px;
+    align-items: center;
 }
 
 /*bg colors*/
@@ -125,6 +136,10 @@ li::first-letter {
     display: flex;
 }
 
+*[toggle-off="true"] {
+    display: none;
+}
+
 /* Recipe cards */
 
 .recipe__container {
@@ -145,6 +160,7 @@ li::first-letter {
 
 .recipe__title {
     font-weight: 500;
+    width: 250px;
 }
 
 .recipe__ingredient {
@@ -166,4 +182,11 @@ li::first-letter {
     font-size: 0.8em;
     font-family: 'Roboto', sans-serif;
     text-align: justify;
+}
+
+/* error message */
+
+#data-error {
+    width: auto;
+    color: rgb(196, 0, 0);
 }
