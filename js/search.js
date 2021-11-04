@@ -73,12 +73,12 @@ export function generalSearch() {
 
                             for (let str = 0; str < recipeKeywords[keywordsWord].split(" ").length; str++ ) {
                                 
-                                if (recipeKeywords[keywordsWord].split(" ")[str] !== userInput) { // if nothing is found anywhere => clear this recipe
+                                if (!recipeKeywords[keywordsWord].split(" ")[str].includes(userInput)) { // if nothing is found anywhere => clear this recipe
                                     toogleState = "off";
                                 }
                                 else {
                                     toogleState = "on";
-                                    break
+                                    if (toogleState == "on") { break }
                                 }
                             }
                             if (toogleState == "on") { break }
