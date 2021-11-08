@@ -49,7 +49,6 @@ export let updatedCards = cards;
 export function generalSearch() {
     
     const userInput = input.value.toLowerCase();
-
     
     searchByTag(tagsContainerInnerText(), updatedCards);
 
@@ -59,7 +58,7 @@ export function generalSearch() {
         const description = updatedCards[recipe].description.toLowerCase();
         const name = updatedCards[recipe].title.toLowerCase();
 
-        //updatedCards[recipe].toggle("off");
+        //Sets the toggle() state param
         let toogleState = "on"
 
         // if title and description doesn't include search input then check in each ingredient, ustensil and appliance
@@ -73,7 +72,7 @@ export function generalSearch() {
 
                             for (let str = 0; str < recipeKeywords[keywordsWord].split(" ").length; str++ ) {
                                 
-                                if (!recipeKeywords[keywordsWord].split(" ")[str].includes(userInput)) { // if nothing is found anywhere => clear this recipe
+                                if (textChecker(userInput, recipeKeywords[keywordsWord].split(" ")[str]) == -1) { // if nothing is found anywhere => clear this recipe
                                     toogleState = "off";
                                 }
                                 else {
@@ -210,4 +209,45 @@ export function findObjectOf(keyword) {
             return arrayOfList[i];
         }
     }
+}
+
+
+/***************************
+ * Vanilla JS custom methods
+ ***************************/
+
+/**
+ * This function is the equivalent of the method includes()
+ * Check if a pattern is included in a string
+ * @param {*} pattern Mostly userInput
+ * @param {*} text 
+ * @returns -1 if not found or 0 if found
+ */
+function textChecker(pattern, text) {
+if (pattern.length == 0)
+    return 0; // Immediate match
+
+// Compute longest suffix-prefix table
+let lsp = [0]; // Base case
+for (let i = 1; i < pattern.length; i++) {
+    let j = lsp[i - 1]; // Start by assuming we're extending the previous LSP
+    while (j > 0 && pattern.charAt(i) != pattern.charAt(j))
+    j = lsp[j - 1];
+    if (pattern.charAt(i) == pattern.charAt(j))
+    j++;
+    lsp.push(j);
+}
+
+// Walk through text string
+let j = 0; // Number of chars matched in pattern
+for (let i = 0; i < text.length; i++) {
+    while (j > 0 && text.charAt(i) != pattern.charAt(j))
+    j = lsp[j - 1]; // Fall back in the pattern
+    if (text.charAt(i) == pattern.charAt(j)) {
+    j++; // Next char matched, increment position
+    if (j == pattern.length)
+        return i - (j - 1);
+    }
+}
+return -1; // Not found
 }
