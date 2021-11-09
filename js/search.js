@@ -62,11 +62,13 @@ export function generalSearch() {
         let toogleState = "on"
 
         // if title and description doesn't include search input then check in each ingredient, ustensil and appliance
-        for (let word = 0; word < description.split(" ").length; word++) {
-            if (description.split(" ")[word] !== userInput) {
+        for (let word = 0; word < description.split(" ").length; word++) { // loops around each description words
 
-                for (let nameWord=0; nameWord < name.split(" ").length; nameWord++) {
-                    if (name.split(" ")[nameWord] !== userInput) {
+            if (textChecker(userInput, description.split(" ")[word]) == -1) { // if description word and input doesnt match
+
+                for (let nameWord=0; nameWord < name.split(" ").length; nameWord++) { // loops around each title words
+
+                    if (textChecker(userInput, name.split(" ")[nameWord]) == -1) { // if title word and input doesnt match
 
                         for (let keywordsWord = 0; keywordsWord < recipeKeywords.length; keywordsWord++) {
 
@@ -83,13 +85,19 @@ export function generalSearch() {
                             if (toogleState == "on") { break }
                             
                         }
-                        if (toogleState == "on") { break }
                         
                     }
+                    else { 
+                        toogleState = "on";
+                        break }
                 }
             }
+            else { 
+                toogleState = "on";
+                break }
         }
 
+        // clears the recipe if not found
         if (toogleState == "off") {
             updatedCards[recipe].toggle(toogleState);
         }
