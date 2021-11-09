@@ -49,28 +49,26 @@ export let updatedCards = cards;
 export function generalSearch() {
     
     const userInput = input.value.toLowerCase();
-
     
     searchByTag(tagsContainerInnerText(), updatedCards)
 
-    for (let recipe = 0; recipe<updatedCards.length; recipe++) { // search on each displayed recipe
-            
-        let recipeKeywords = getAllKeywordsOf(updatedCards[recipe]); 
-        const description = updatedCards[recipe].description.toLowerCase();
-        const name = updatedCards[recipe].title.toLowerCase();
-
+    updatedCards.forEach((card) => { // search on each displayed recipe
+        
+        let recipeKeywords = getAllKeywordsOf(card); 
+        const description = card.description.toLowerCase();
+        const name = card.title.toLowerCase();
+    
         // if title and description doesn't include search input then check in each ingredient, ustensil and appliance
         if (!description.includes(userInput) && !name.includes(userInput) ) {
-
-            for (let i = 0; i < recipeKeywords.length; i++) {
+    
+            recipeKeywords.forEach((keyword) => {
                 
-                if (!recipeKeywords[i].includes(userInput)) { // if nothing is found anywhere => clear this recipe
-                    updatedCards[recipe].toggle("off") 
-                    
+                if (!keyword.includes(userInput)) { // if nothing is found anywhere => clear this recipe
+                    card.toggle("off") 
                 }
-            }
+            })
         }
-    }
+    })
 }
 
 
