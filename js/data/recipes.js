@@ -139,7 +139,7 @@ export const recipes = [
         "time": 50,
         "description": "Faire cuire le riz. Une fois le riz cuit, le laisser refroidir. Couper les oeufs dur en quarts ou en lamelle au choix, coupez le tomates en dés, ajouter au riz les oeufs, les tomates, le poisson, le maïs et la vinaigrette. Ajouter au gout de chacun des corniches, olives etc..",
         "appliance": "Cuiseur de riz",
-        "ustensils": ["Saladier", "passoire"]
+        "ustensils": ["passoire"]
     },
     {
         "id": 5,
@@ -217,7 +217,7 @@ export const recipes = [
         "time": 50,
         "description": "Commencez par mélanger les oeufs le sucre et le sucre vanillé dans un Saladier, découper les pommes en tranches, ajouter la crème fraiche aux oeufs. Une fois que tout est pret, étalez la tarte dans le moule. N'oubliez pas de piquer le fond avec une fourchette avant depositionner les pommes sur la tarte. Finallement verser la préparation à base d'oeufs et de crême fraiche. Laisser cuire au four pendant 30 minutes",
         "appliance": "Four",
-        "ustensils": ["moule à tarte", "Saladier", "fourchette"]
+        "ustensils": ["moule à tarte", "fourchette"]
     },{
         "id": 7,
         "name": "Tartelettes au chocolat et aux fraises",
@@ -250,7 +250,7 @@ export const recipes = [
         "time": 50,
         "description": "Etaler la pate dans les moules à tartelette. Faire cuire la pate 30 minutes. Découper le chocolat en morceau et le faire chauffer, y ajouter la crême liquide, ajouter le beurre et remuer jusqu'à avoir une pâte homogène. Verser la pate sur les tartelettes. Couper les fraises en 2 et les positionner sur ",
         "appliance":"Four",
-        "ustensils":["Moule à tartelettes", "Casserole"]
+        "ustensils":["Moule à tartelettes"]
     }, {
         "id": 8,
         "name": "Brownie",
@@ -290,7 +290,7 @@ export const recipes = [
         "time": 60,
         "description": "Hachez les noix grossièrement. Faire fondre le chocolat avec le beurre. Mélanger les oeuf et le sucre et mélanger au chocolat. Ajouter la farine. Mélanger afin d'avoir quelque chose d'homogène puis incorporer les noix. Verser la préparation dans un moule de préférence rectangulaire. Cuire 2O à 25 minutes à 180°. Sortez du four et attendez quelques minutes pour démouler. Servir avec une boule de glace pour plus de gourmandise.",
         "appliance": "Four",
-        "ustensils": ["Moule à gateaux", "Casserole"]
+        "ustensils": ["Moule à gateaux"]
     },
     {
         "id": 9,
@@ -460,7 +460,7 @@ export const recipes = [
         "time":40,
         "description":"Cuire les pommes de terre environ 30 minutes. Découper les échalottes finement. Durant la cuisson des pommes de terre. Préparez la vinaigrette avec l'huile d'olive et le vinaigre de cidre. Salez poivrez à discrétion. Dans un Saladier, mettre le mâche. Ajouter",
         "appliance": "Casserole",
-        "ustensils":["Couteau","Saladier","Cuillère en bois"]
+        "ustensils":["Couteau", "Cuillère en bois"]
     },
     {
         "id": 14,
@@ -539,7 +539,7 @@ export const recipes = [
         "time": 60,
         "description":"Mélangez dans un Saladier, la farine, les oeufs, et le lait. Battez jusqu'à avoir une masse homogène. Pendant ce temps faites fondre le beurre et ajoutez en une partie à la pâte à crêpes. Faire fondre le chocolat ( avec le reste du beurre salé ). Lorsque vous chauffez les crêpes. Ajouter le chocolat fondu et les bananes coupées en rondelles. Ajoutez une touche de chantilly pour les gourmands",
         "appliance": "Poêle à crêpe",
-        "ustensils":["Saladier", "Louche", "Cuillère en bois"]
+        "ustensils":["Louche", "Cuillère en bois"]
     },
     {
         "id": 16,
@@ -776,7 +776,7 @@ export const recipes = [
         "time": 30,
         "description":"Faire fondre le chocolat et le beurre au bain marie. Dans un Saladier battre les oeufs avec le sucre jusqu'à obtenir une texture de type mousse. Ajouter la farine ainsi que le mélange de beurre et chocolat fondu. Beurrez le moule à gateaux. Mettre au four préchauffé à 200° puis faites chauffer pendant 15 minutes. C'est prêt. Servir avec une boule de glace ou une crême dessert.",
         "appliance": "Four",
-        "ustensils":["moule à gateaux", "fouet", "Casserole"]
+        "ustensils":["moule à gateaux", "fouet"]
     },
     {
         "id": 23,
@@ -890,7 +890,7 @@ export const recipes = [
         "time": 30,
         "description":"Faire fondre le beurre et le mélanger avec le sucre. Finalement ajouter l'oeuf. Ajouter la farine tout en mélangeant peu pa peu pour avoir une masse sans grumaux. Ajouter les pépites de chocolat. Faire, une plaque de cuisson de petites boules pour les cookies. Mettre au four à 180° pour 10 minutes.",
         "appliance": "Four",
-        "ustensils":["fouet", "Saladier", "plaque de cuisson"]
+        "ustensils":["fouet", "plaque de cuisson"]
     },
     {
         "id": 26,
@@ -990,7 +990,7 @@ export const recipes = [
         "time": 80,
         "description":"Emincer les blanc de poireaux et les faire chauffer dans 25 grammes de beurre. AJouter les pommes de terres coupées en morceaux. Ajouter l'eau et laisser mijoter pour 45 minutes. Chauffer l'oseille avec le beurre restant puis incorporer le tout. Mixez. Ajoutez la crème. Bon appetit.",
         "appliance": "Mixer",
-        "ustensils":["Casserole","Couteau"]
+        "ustensils":["Couteau"]
     },
     {
         "id": 29,
@@ -1046,7 +1046,7 @@ export const recipes = [
         "time": 60,
         "description":"Mettre tous les ingrédients dans une cocotte. ajouter de l'eau pour recouvrir l'ensemble et laisser cuirre à petit feur pour 1 heure. Passer au mixer. Salez, poivrez. C'est prêt",
         "appliance": "Mixer",
-        "ustensils":["Casserole", "Cuillère en bois"]
+        "ustensils":["Cuillère en bois"]
     },
     {
         "id": 31,
@@ -1362,7 +1362,7 @@ export const recipes = [
         "time": 40,
         "description":"Découper les pommes en dé. Mélanger dans un Saladier la farine, le sucre et le beurre. Bien mélanger. Beurrer le moule et ajouter les pommes. Par dessus placez la pate que vous avez obtenu. Cuire 20 minutes au four",
         "appliance": "Four",
-        "ustensils":["Saladier", "Couteau","fouet"]
+        "ustensils":["Couteau","fouet"]
     },
     {
         "id": 40,
@@ -1446,7 +1446,7 @@ export const recipes = [
         "time": 60,
         "description":"Commencez par préparer la mousse au chocolat au moins 2 heures avant. Quand la mousse est prête et a reposée. Alors mouiller les boudoirs dans le jus des poires. Disposer. Alterner : mousse au chocolat, boudoirs et poires. Mettre au frais.",
         "appliance": "Moule à charlotte",
-        "ustensils":["Saladier", "Couteau", "fouet"]
+        "ustensils":["Couteau", "fouet"]
     },
     {
         "id": 43,
@@ -1545,7 +1545,7 @@ export const recipes = [
         "time": 30,
         "description":"Faire bouillir le lait ( on peut y ajouter de l'essence de vanille. Battre les oeufs et le sucre, ajouter la farine puis finalement ajouter le lait chaud. Remettre à feu doux pour faire épaissir en remuant pendant 5 à 10 minutes.",
         "appliance": "Casserole",
-        "ustensils":["fouet","Saladier"]
+        "ustensils":["fouet"]
     },
     {
         "id": 46,
