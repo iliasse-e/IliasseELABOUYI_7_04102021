@@ -15,6 +15,7 @@ input.addEventListener("input", function() {
         generalSearch()
     }
     else {
+        updatedCards = cards; //reset updated cards
         searchByTag(tagsContainerInnerText(), updatedCards);
     }
     
