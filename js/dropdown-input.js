@@ -7,7 +7,7 @@ const inputs = document.querySelectorAll(".dropdown__input");
 
 inputs.forEach(input => {
     input.addEventListener("input", function () {
-        toggleLi(input.getAttribute("category"))
+        toggleLi(input.getAttribute("data-category"))
     } 
 )})
 
