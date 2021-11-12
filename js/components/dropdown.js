@@ -68,7 +68,7 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
         // clears inputs and reset lists
         dropdownInputs.forEach(input => {
             input.value = ""; // clears input
-            toggleLi(input.getAttribute("category")) // reset list
+            toggleLi(input.getAttribute("data-category")) // reset list
         });
     }
 
