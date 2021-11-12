@@ -10,11 +10,12 @@ let input = document.getElementById("general-search");
 /**
  * Launch input search 
  */
-input.addEventListener("input", function() {
+ input.addEventListener("input", function() {
     if (input.value.length > 2) {
         generalSearch()
     }
     else {
+        updatedCards = cards; //reset updated cards
         searchByTag(tagsContainerInnerText(), updatedCards);
     }
     
@@ -22,17 +23,16 @@ input.addEventListener("input", function() {
     const cardsContainer = document.getElementById("cards-container");
     let cardsCounter = document.querySelectorAll(".card-container[data-visible='true']").length;
 
+    if (document.getElementById("data-error")) {
+        document.getElementById("data-error").remove()
+    }
     if (cardsCounter < 1) {
         const node = document.createElement("p");
         node.setAttribute("id", "data-error")
         node.textContent = "Aucune recette ne correspond à votre critère… vous pouvez chercher « tarte aux pommes », « poisson », etc."
         cardsContainer.appendChild(node);
     }
-    else {
-        if (document.getElementById("data-error")) {
-            document.getElementById("data-error").remove()
-        }
-    }
+
 })
 
 
@@ -50,7 +50,7 @@ export function generalSearch() {
     
     const userInput = input.value.toLowerCase();
     
-    searchByTag(tagsContainerInnerText(), updatedCards)
+    searchByTag(tagsContainerInnerText(), recipiesDisplayed())
 
     updatedCards.forEach((card) => { // search on each displayed recipe
         
@@ -78,26 +78,6 @@ export function generalSearch() {
  * @param {Array} recipeCards represents objects of cards recipe
  */
 export function searchByTag(selectedTags, recipeCards) {
-
-    /************************
-    * Recipe cards functions
-    *************************/
-
-    /**
-     * Gathers all card objects that are visible
-     * @returns Array of {Object} cards displayed in result
-     */
-    function recipiesDisplayed() { 
-        let array = [];
-
-        for (let i=0; i<recipeCards.length; i++) {
-            if (recipeCards[i].isVisible == true) {
-                array.push(recipeCards[i])
-            }
-        }
-        recipeCards = array;
-        return array
-    }
 
     // only when last tag is removed
     if (selectedTags.length < 1) {
@@ -184,4 +164,24 @@ export function findObjectOf(keyword) {
             return arrayOfList[i];
         }
     }
+}
+
+/************************
+* Recipe cards functions
+*************************/
+
+/**
+ * Gathers all card objects that are visible
+ * @returns Array of {Object} cards displayed in result
+ */
+ export function recipiesDisplayed() { 
+    let array = [];
+
+    for (let i=0; i<updatedCards.length; i++) {
+        if (updatedCards[i].isVisible == true) {
+            array.push(updatedCards[i])
+        }
+    }
+    updatedCards = array;
+    return array
 }
