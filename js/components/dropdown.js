@@ -5,7 +5,7 @@
 
 import { toggleLi } from "../dropdown-input.js";
 import { filterDropdowns } from "../filter-dropdown.js";
-import { searchByTag, updatedCards } from "../search.js";
+import { recipiesDisplayed, searchByTag } from "../search.js";
 import { Tag } from "../tag.js";
 
 // Dom elements
@@ -100,7 +100,7 @@ dropdownButtons.forEach((btn) => btn.addEventListener("click", (event) => {
         closeList();
         
         /****** Update search result and dropdowns *********/ 
-        searchByTag(tagsContainerInnerText(), updatedCards);
+        searchByTag(tagsContainerInnerText(), recipiesDisplayed());
     }))
     
     // toggles off dropdown on outside or chevron click
